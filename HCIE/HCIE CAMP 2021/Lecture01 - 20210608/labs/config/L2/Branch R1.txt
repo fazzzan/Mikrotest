@@ -1,42 +1,25 @@
 system-view 
-sysname R1
- 
-### Добавляем VLAN
-vlan batch 2 to 20
+sysname Branch-R1
 
-### Конфигурим Eth-trunk 1 из двух IF
-interface Eth-Trunk 1 
-trunkport gigabitethernet 0/0/2 
-trunkport gigabitethernet 0/0/3 
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20
+### создаем aCL 1 на разрешение ip
+dialer-rule
+dialer-rule 1 ip permit
 quit
 
-### Транк на аплинке
-interface gigabitethernet 0/0/1
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20 
-quit 
-
-### Конфигурируем MST регион
-stp region-configuration
-region-name RG1 
-instance 1 vlan 2 to 10 
-instance 2 vlan 11 to 20 
-active region-configuration 
-quit 
-
-### Задаем ROOT для соответствующего MSTI
-stp instance 1 root primary
-stp instance 2 root secondary
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Включение Security на DP у рута вниз, к ACCESS-SW
-interface gigabitethernet 0/0/1
-stp root-protection
+### Настройка PPPoE: IF тип dialer № 1
+int Dialer 1
+link-protocol ppp
+ppp pap local-user HuaweiR1 password cipher R1
+ip address ppp-negotiate
+dialer user HuaweiR1
+dialer bundle 1
+dialer-group 1
 quit
 
-### Включаем STP
-stp enable
+### Конфигурим IF на использование bundle
+int gi 0/0/0
+pppoe-client dial-bundle-number 1
+quit
+
+
+ip route-static 0.0.0.0 0.0.0.0 1.1.1.1

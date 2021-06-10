@@ -1,42 +1,51 @@
 system-view 
-sysname SwitchB
+sysname R2
 
-### Добавляем VLAN
-vlan batch 2 to 20
-
-### Конфигурим Eth-trunk 1 из двух IF
-interface Eth-Trunk 1 
-trunkport gigabitethernet 0/0/2 
-trunkport gigabitethernet 0/0/3 
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20
+### Задаем pool 
+ip pool pool1
+gateway-list 1.1.1.1
+network 1.1.1.0 mask 255.255.255.0
 quit
 
-### Транк на аплинке
-interface gigabitethernet 0/0/1
-port link-type trunk
-port trunk allow-pass vlan 2 to 20
+### Создаем пользователя
+aaa
+local-user HuaweiR1 password cipher R1
+local-user HuaweiR1 service-type ppp
 quit
 
-### Конфигурируем MST регион
-stp region-configuration 
-region-name RG1 
-instance 1 vlan 2 to 10 
-instance 2 vlan 11 to 20 
-active region-configuration 
-quit 
-
-### Задаем ROOT для соответствующего MSTI
-stp instance 1 root secondary
-stp instance 2 root primary
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Включение Security на DP у рута вниз, к ACCESS-SW
-interface gigabitethernet 0/0/1
-stp root-protection
+### Создаем virt template
+interface Virtual-Template 0
+ppp authentication-mode pap
+remote address pool pool1
+ip address 1.1.1.1 24
 quit
 
-### Включаем STP
-stp enable
+### Вешаем шаблон на If
+int gi 0/0/0
+pppoe-server bind virtual-template 0
+
+### Добавляем пользователя
+aaa
+local-user Huawei password cipher Hello	
+local-user Huawei service-type ppp
+quit
+
+### Настраиваем MP-group
+interface Mp-group 0/0/0
+ip address 20.1.1.1 24
+quit
+
+### Назначаем IF MP-Group
+int s1/0/0
+link-protocol ppp
+ppp authentication-mode pap
+ppp mp Mp-group 0/0/0
+quit
+
+int s1/0/1
+link-protocol ppp
+ppp authentication-mode pap
+ppp mp Mp-group 0/0/0
+quit
+
+ip route-static 10.1.1.0 255.255.255.0 20.1.1.2

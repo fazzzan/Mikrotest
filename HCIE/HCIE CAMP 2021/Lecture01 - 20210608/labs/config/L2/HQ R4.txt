@@ -1,49 +1,20 @@
 system-view 
-sysname SwitchD
+sysname HQ-R4
 
-### Добавляем VLAN
-vlan batch 2 to 20
-
-### Транк на аплинке и между свичами
-interface gigabitethernet 0/0/3
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20 
-quit 
-
-interface gigabitethernet 0/0/2
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20 
-quit 
-
-### Конфигурируем MST регион
-stp region-configuration 
-region-name RG1 
-instance 1 vlan 2 to 10 
-instance 2 vlan 11 to 20 
-active region-configuration 
-quit 
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Делаем максимальной стоимость пути для MSTI2, чтобы порт проигрывал при расчете MSTP
-interface gigabitethernet 0/0/2
-stp instance 1 cost 20000
+### Назначаем IF IP-Trunk
+int Ip-Trunk 1
+ip address 10.1.1.2 24
 quit
 
-### Включаем защиту: работает обязатeльно совместно
-### Глобально
-stp bpdu-protection
-### Заблочить данный порт, если получишь BPDU (обязательно stp bpdu-protection)
-interface gigabitethernet 0/0/1 
-stp edged-port enable
+### Назначаем протокол на serial в сторону R3
+int s0/0/2
+link-protocol hdlc ### Y
+ip-trunk 1
 quit
 
-### Активтируем на порту VLAN2
-interface gigabitethernet 0/0/1
-port link-type access
-port default vlan 11
-quit 
+int s0/0/3
+link-protocol hdlc ### Y
+ip-trunk 1
+quit
 
-Включаем STP
-stp enable
+ip route-static 0.0.0.0 0.0.0.0 10.1.1.1

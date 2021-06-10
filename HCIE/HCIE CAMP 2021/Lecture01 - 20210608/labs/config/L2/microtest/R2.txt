@@ -1,42 +1,74 @@
-system-view 
-sysname SwitchB
-
-### Добавляем VLAN
-vlan batch 2 to 20
-
-### Конфигурим Eth-trunk 1 из двух IF
-interface Eth-Trunk 1 
-trunkport gigabitethernet 0/0/2 
-trunkport gigabitethernet 0/0/3 
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20
-quit
-
-### Транк на аплинке
-interface gigabitethernet 0/0/1
-port link-type trunk
-port trunk allow-pass vlan 2 to 20
-quit
-
-### Конфигурируем MST регион
-stp region-configuration 
-region-name RG1 
-instance 1 vlan 2 to 10 
-instance 2 vlan 11 to 20 
-active region-configuration 
-quit 
-
-### Задаем ROOT для соответствующего MSTI
-stp instance 1 root secondary
-stp instance 2 root primary
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Включение Security на DP у рута вниз, к ACCESS-SW
-interface gigabitethernet 0/0/1
-stp root-protection
-quit
-
-### Включаем STP
-stp enable
+ sysname R2
+#
+ board add 0/1 2SA 
+#
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
+#
+ clock timezone China-Standard-Time minus 08:00:00
+#
+portal local-server load flash:/portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ wlan ac-global carrier id other ac id 0
+#
+ set cpu-usage threshold 80 restore 75
+#
+ip pool pool1
+ gateway-list 1.1.1.1 
+ network 1.1.1.0 mask 255.255.255.0 
+#
+aaa 
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
+ local-user admin service-type http
+ local-user huawei password cipher %$%$'nEl*rhde/u1/kSZ)YW9_|<W%$%$
+ local-user huawei service-type ppp
+ local-user huaweir1 password cipher %$%$3[Ds>'jDp@_6{]"&B{jA_ZmZ%$%$
+ local-user huaweir1 service-type ppp
+#
+firewall zone Local
+ priority 15
+#
+interface Mp-group0/0/0
+ ip address 20.1.1.1 255.255.255.0 
+#
+interface Serial1/0/0
+ link-protocol ppp
+ ppp authentication-mode pap 
+ ppp mp Mp-group 0/0/0
+#
+interface Serial1/0/1
+ link-protocol ppp
+ ppp authentication-mode pap 
+ ppp mp Mp-group 0/0/0
+#
+interface Virtual-Template0
+ ppp authentication-mode pap 
+ remote address pool pool1
+ ip address 1.1.1.1 255.255.255.0 
+#
+interface GigabitEthernet0/0/0
+ pppoe-server bind Virtual-Template 0
+#
+interface GigabitEthernet0/0/1
+#
+interface GigabitEthernet0/0/2
+#
+interface NULL0
+#
+ip route-static 10.1.1.0 255.255.255.0 20.1.1.2
+#
+user-interface con 0
+ authentication-mode password
+user-interface vty 0 4
+user-interface vty 16 20
+#
+wlan ac
+#
+return

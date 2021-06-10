@@ -1,42 +1,55 @@
-system-view 
-sysname SwitchA 
- 
-### Добавляем VLAN
-vlan batch 2 to 20
-
-### Конфигурим Eth-trunk 1 из двух IF
-interface Eth-Trunk 1 
-trunkport gigabitethernet 0/0/2 
-trunkport gigabitethernet 0/0/3 
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20
-quit
-
-### Транк на аплинке
-interface gigabitethernet 0/0/1
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20 
-quit 
-
-### Конфигурируем MST регион
-stp region-configuration
-region-name RG1 
-instance 1 vlan 2 to 10 
-instance 2 vlan 11 to 20 
-active region-configuration 
-quit 
-
-### Задаем ROOT для соответствующего MSTI
-stp instance 1 root primary
-stp instance 2 root secondary
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Включение Security на DP у рута вниз, к ACCESS-SW
-interface gigabitethernet 0/0/1
-stp root-protection
-quit
-
-### Включаем STP
-stp enable
+ sysname Branch-R1
+#
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
+#
+ clock timezone China-Standard-Time minus 08:00:00
+#
+portal local-server load portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ set cpu-usage threshold 80 restore 75
+#
+aaa 
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
+ local-user admin service-type http
+#
+firewall zone Local
+ priority 15
+#
+interface Dialer1
+ link-protocol ppp
+ ppp pap local-user HuaweiR1 password cipher %$%$)eoD8.tJ~7Sy<,,{V9+=,.H(%$%$
+ ip address ppp-negotiate
+ dialer user HuaweiR1
+ dialer bundle 1
+ dialer-group 1
+#
+interface GigabitEthernet0/0/0
+ pppoe-client dial-bundle-number 1 
+#
+interface GigabitEthernet0/0/1
+#
+interface GigabitEthernet0/0/2
+#
+interface NULL0
+#
+dialer-rule
+ dialer-rule 1 ip permit
+#
+ip route-static 0.0.0.0 0.0.0.0 1.1.1.1
+#
+user-interface con 0
+ authentication-mode password
+user-interface vty 0 4
+user-interface vty 16 20
+#
+wlan ac
+#
+return
