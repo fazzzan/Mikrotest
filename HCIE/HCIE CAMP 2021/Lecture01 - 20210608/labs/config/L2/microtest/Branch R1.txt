@@ -1,0 +1,42 @@
+system-view 
+sysname SwitchA 
+ 
+### Добавляем VLAN
+vlan batch 2 to 20
+
+### Конфигурим Eth-trunk 1 из двух IF
+interface Eth-Trunk 1 
+trunkport gigabitethernet 0/0/2 
+trunkport gigabitethernet 0/0/3 
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20
+quit
+
+### Транк на аплинке
+interface gigabitethernet 0/0/1
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20 
+quit 
+
+### Конфигурируем MST регион
+stp region-configuration
+region-name RG1 
+instance 1 vlan 2 to 10 
+instance 2 vlan 11 to 20 
+active region-configuration 
+quit 
+
+### Задаем ROOT для соответствующего MSTI
+stp instance 1 root primary
+stp instance 2 root secondary
+
+### Включение проприетарщины HUA для расчета pathcost
+stp pathcost-standard legacy
+
+### Включение Security на DP у рута вниз, к ACCESS-SW
+interface gigabitethernet 0/0/1
+stp root-protection
+quit
+
+### Включаем STP
+stp enable

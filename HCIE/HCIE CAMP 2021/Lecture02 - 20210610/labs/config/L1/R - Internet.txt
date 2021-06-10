@@ -1,0 +1,11 @@
+system-view 
+sysname Internet
+ 
+### Настроим сразу IPv4 на outside и IPv6 на Inside
+interface GigabitEthernet 0/0/1
+ip address 200.1.1.2 24 
+quit
+
+interface GigabitEthernet 0/0/2
+ip address 200.2.2.1 24 
+quit

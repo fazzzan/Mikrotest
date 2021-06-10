@@ -1,0 +1,64 @@
+sysname R2
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher [0/E$cYWEGbL^B&WSBiQ#.0#
+ local-user admin service-type http
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ipv6 address 2002:C802:202::FFFF/64
+#
+interface GigabitEthernet0/0/2
+ ip address 200.2.2.2 255.255.255.0
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface Tunnel0/0/0
+ ipv6 enable
+ ipv6 address auto link-local
+ tunnel-protocol ipv6-ipv4 6to4
+ source 200.2.2.2
+#
+ip route-static 0.0.0.0 0.0.0.0 200.2.2.1
+#
+ipv6 route-static 2002:C801:101:: 64 Tunnel0/0/0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

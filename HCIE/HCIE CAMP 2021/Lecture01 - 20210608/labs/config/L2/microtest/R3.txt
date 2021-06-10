@@ -1,0 +1,49 @@
+system-view 
+sysname SwitchC
+
+### Добавляем VLAN
+vlan batch 2 to 20
+
+### Транк на аплинке и между свичами
+interface gigabitethernet 0/0/3
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20 
+quit 
+
+interface gigabitethernet 0/0/2
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20 
+quit 
+
+### Конфигурируем MST регион
+stp region-configuration 
+region-name RG1 
+instance 1 vlan 2 to 10 
+instance 2 vlan 11 to 20 
+active region-configuration 
+quit 
+
+### Включение проприетарщины HUA для расчета pathcost
+stp pathcost-standard legacy
+
+### Делаем максимальной стоимость пути для MSTI2, чтобы порт проигрывал при расчете MSTP
+interface gigabitethernet 0/0/2
+stp instance 2 cost 20000
+quit
+
+### Включаем защиту: работает обязатeльно совместно
+### Глобально
+stp bpdu-protection
+### Заблочить данный порт, если получишь BPDU (обязательно stp bpdu-protection)
+interface gigabitethernet 0/0/1 
+stp edged-port enable
+quit
+
+### Активтируем на порту VLAN2
+interface gigabitethernet 0/0/1
+port link-type access
+port default vlan 2
+quit 
+
+Включаем STP
+stp enable
