@@ -28,13 +28,13 @@ IS-IS (из v 1.1)
 
 Лаба 1, 2 - сделать до Чтв.
 
-## MSTP ##
+## MSTP (стр 5-27)## 
 ![](pictures/10.jpg)
 
 https://habr.com/ru/post/419785/
 
 
-## iStack/стекирование ##
+## iStack/стекирование (стр 28-56)##
 
 ![](pictures/11.jpg)
 Дает нам:
@@ -46,14 +46,41 @@ https://habr.com/ru/post/419785/
 ![](pictures/12.jpg)
 - выбирается мастер, который отвечает за работу коммутаторов в iStack
 
-
-Прослушали материал, запускаем лабу:
-
-Стр. 17-28
+## Eth-trunk (стр 57-73) ##
+Прослушали материал, запускаем лабу (Стр. 17-28):
 
 ![](pictures/13.jpg)
 
-## WAN-Technologies ##
+## WAN-Technologies (стр 73-136) ##
+### PAP Au 108-109 ###
+### CHAP Au 110-114 ###
+### NCP 115-117 ###
+### MP (Multilink PPP) 118-123 ###
+
+![](pictures/15.jpg)
+![](pictures/16.jpg)
+
+![](pictures/17.jpg)
+
+![](pictures/18.jpg)
+
+### IP-Trunk 124-126 ###
+Trunk interfaces are classified:
+- An Eth-Trunk consists of only Ethernet links.
+- An IP-Trunk consists of POS interfaces.
+
+![](pictures/19.jpg)
+
+### IP-Trunk 127-136 mas ###
+PPP превращает PPP-кадры в ETHERNET-кадры. Для подключения к серверу доступа и последующему выходу в интернет или доступу к ресурсам LAN. At the PPPoE session stage, the PPPoE server and client send all Ethernet data packets in unicast mode. Ресь по-сути идет про обмен информацией с некой базой данных пользователей.
+
+![](pictures/20.jpg)
+
+![](pictures/21.jpg)
+
+![](pictures/22.jpg)
+
+
 
 http://www.omavel.in/all/ensp-20v100r003c00/
 
