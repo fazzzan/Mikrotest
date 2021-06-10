@@ -89,3 +89,156 @@ stp enable
 Ну и чуть-чуть допов: есть информация, что MSTP региона, который должен быть одинаковым на всех участниках в регионе, вычисляется как хэш и передается в открытом виде
 
 ![](pictures/09.jpg)
+
+___ЛР2___
+
+Задача:
+
+1. Настроить PPPoE клиента и сервера на R1 и R2 соответственно. 
+2. Настроить serial и собрать их в MP на R2 и R3. 
+3. Настроить serial и собрать их в IP-Trunk на R3 и R4. 
+4. Настроить статик так, чтобы появилась связность R1 and R4 по IPv4.
+
+![](pictures/24.jpg)
+
+![](pictures/21.jpg)
+
+
+
+1. Настройка PPPoE
+___Server___
+```
+### Задаем pool 
+ip pool pool1
+network 1.1.1.0 mask 255.255.255.0
+gateway-list 1.1.1.1
+quit
+
+### Создаем пользователя
+aaa
+local-user HuaweiR1 password cipher R1
+local-user HuaweiR1 service-type ppp
+quit
+
+### Создаем virt template
+interface Virtual-Template 30
+ppp authentication-mode pap
+remote address pool pool1
+ip address 1.1.1.1 24
+quit
+
+### Вешаем шаблон на If
+int gi 0/0/0
+pppoe-server bind virtual-template 30
+```
+
+___Client___
+
+```
+### создаем aCL 100 на инициацию PPPOE-сессии (пример - ip-трафик), укажем его позхже, в dialer-group
+
+dialer-rule
+dialer-rule <100> ip permit
+quit
+
+### Настройка PPPoE: IF тип dialer № 1
+int Dialer 1
+link-protocol ppp
+ppp pap local-user HuaweiR1 password cipher R1
+ip address ppp-negotiate
+dialer user HuaweiR1
+dialer bundle <10>
+dialer-group <100>
+quit
+
+### Конфигурим IF на использование bundle 10
+int gi 0/0/0
+pppoe-client dial-bundle-number <10>
+quit
+```
+PPPoE - сессия поднялась, проверка ```display interface Dialer 1```
+
+![](pictures/20.jpg)
+
+![](pictures/25.jpg)
+
+2. Настройка PPP/MP
+
+Authenticator (обрабатывает запрос на аутентификацию). В теории приведена картинка на CHAP. Здесь конфиг на PAP, то есть к Authenticator прилетает запрос на аутентификацию (plaintext username/pass) и он его согласовывает/отказывает на основании данных из локальной БД
+```
+### Добавляем пользователя
+aaa
+local-user Huawei password cipher Hello	
+local-user Huawei service-type ppp
+quit
+
+### Настраиваем MP-group
+interface Mp-group 0/0/0
+ip address 20.1.1.1 24
+quit
+
+### Назначаем IF MP-Group
+int s1/0/0
+link-protocol ppp
+ppp authentication-mode pap
+ppp mp Mp-group 0/0/0
+quit
+
+int s1/0/1
+link-protocol ppp
+ppp authentication-mode pap
+ppp mp Mp-group 0/0/0
+quit
+```
+
+Authenticated (тот, кого будем аутентифицировать)
+```
+### Настраиваем MP-group
+interface Mp-group 0/0/0
+ip address 20.1.1.2 24
+quit
+
+### Назначаем IF MP-Group
+int s0/0/0
+link-protocol ppp
+ppp pap local-user Huawei password cipher Hello
+ppp mp Mp-group 0/0/0
+quit
+
+int s0/0/1
+link-protocol ppp
+ppp pap local-user Huawei password cipher Hello
+ppp mp Mp-group 0/0/0
+quit
+
+```
+
+сессия поднялась только после того, как на R2 добавил все IF в виртуальный линк
+
+![](pictures/22.jpg)
+
+3. Настройка IP-Trunk
+
+Выполняется аналогично с обоих сторон, только на SO - интерфейсах:
+```
+### Назначаем IF IP-Trunk
+int Ip-Trunk 1
+ip address <10.1.1.1 24>
+quit
+
+### Назначаем протокол на serial в сторону HQ
+int s0/0/2
+link-protocol hdlc ### надо подтвердить Y
+ip-trunk 1
+quit
+
+int s0/0/3
+link-protocol hdlc ### надо подтвердить Y
+ip-trunk 1
+quit
+
+```
+
+on R3 and R4 - сессия поднялась: просто копипастить нельзя, так как нужно подтверждение о смене типа на ___hdlc___
+
+![](pictures/23.jpg)
