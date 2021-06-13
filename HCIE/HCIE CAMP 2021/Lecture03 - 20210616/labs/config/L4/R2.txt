@@ -1,0 +1,30 @@
+system-view 
+sysname R2
+ipv6
+ 
+### Настроим сразу IPv4 на outside и IPv6 на Inside
+interface GigabitEthernet0/0/2
+ipv6 enable
+ipv6 address 2004::1 64
+quit
+
+interface GigabitEthernet 0/0/1
+ipv6 enable
+ipv6 address 2001::1 64 
+quit
+
+
+### OSPFv3 3
+ospfv3 3
+router-id 20.20.20.20
+quit
+
+### включаем OSPFv3 3 на IF
+interface GigabitEthernet0/0/1
+ospfv3 3 area 1
+quit
+
+### импортируем коннектед маршруты
+ospfv3 3
+import-route direct
+quit

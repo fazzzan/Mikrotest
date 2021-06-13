@@ -1,0 +1,43 @@
+system-view 
+sysname R3
+ipv6
+ 
+### Настроим сразу IPv6
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2000::2 64
+quit
+
+interface GigabitEthernet 0/0/2
+ipv6 enable
+ipv6 address 2001::2 64 
+quit
+
+### OSPFv3 2
+ospfv3 2
+router-id 30.30.30.30
+quit
+
+### OSPFv3 3
+ospfv3 3
+router-id 30.30.30.30
+quit
+
+### включаем OSPFv3 2 на IF
+interface GigabitEthernet0/0/1
+ospfv3 2 area 0
+quit
+
+### включаем OSPFv3 3 на IF
+interface GigabitEthernet0/0/2
+ospfv3 3 area 1
+quit
+
+### импортируем маршруты из ospf второго Process-ID
+ospfv3 2
+import-route ospfv3 3
+quit
+
+ospfv3 3
+import-route ospfv3 2
+quit
