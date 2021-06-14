@@ -55,5 +55,8 @@ ipv6 route-static 2002:C802:0202:: 64 Tunnel 0/0/0
 
 Конфиги по задаче тут:
 [R1](config/L3/R1.txt)
+
 [R2](config/L3/R2.txt)
-[R - Internet](config/L3/R - Internet.txt)
+
+[R-Internet](config/L3/R-Internet.txt)
+
