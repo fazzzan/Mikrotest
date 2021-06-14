@@ -57,9 +57,11 @@ https://habr.com/ru/post/419785/
 ### NCP 115-117 ###
 ### MP (Multilink PPP) 118-123 ###
 
+Способ с CHAP
 ![](pictures/15.jpg)
 ![](pictures/16.jpg)
 
+Способ с PAP
 ![](pictures/17.jpg)
 
 ![](pictures/18.jpg)

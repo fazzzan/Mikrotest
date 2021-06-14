@@ -1,6 +1,6 @@
 20210608
 
-Задача:
+Задача Lab3:
 Настроить IPv6 прохождение трафика в туннеле. Дизайн, Адресация - на картинке ниже.
 
 ![](pictures/01.jpg)
@@ -53,3 +53,7 @@ quit
 ipv6 route-static 2002:C802:0202:: 64 Tunnel 0/0/0
 ```
 
+Конфиги по задаче тут:
+[R1](config/L3/R1.txt)
+[R2](config/L3/R2.txt)
+[R - Internet](config/L3/R - Internet.txt)
