@@ -6,6 +6,12 @@
 сконфигурировать MSTP, и разнести по разным рутам разные VLAN
 
 ```
+Сброс
+reset saved-config
+
+Группа портов
+group-member gigabitethernet 1/0/1 to gigabitethernet 1/0/8
+
 system-view 
 sysname SwitchA 
  
