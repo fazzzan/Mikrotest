@@ -10,7 +10,8 @@
 reset saved-config
 
 Группа портов
-group-group gigabitethernet 1/0/1 to gigabitethernet 1/0/8
+port-group ITPorts
+group-member gi 0/0/2 to gi 0/0/3
 
 system-view 
 sysname SwitchA 
