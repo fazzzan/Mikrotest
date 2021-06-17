@@ -123,3 +123,238 @@ quit
 Проверка связности между PC - выполнена успешно
 
 Конфиги по задаче тут: [R1](config/L4/R1.txt), [R2](config/L4/R2.txt), [R3](config/L4/R3.txt)
+
+
+
+# Д/З 1 №
+Дана подсеть
+
+![](pictures/09.jpg)
+
+Задания
+
+1. Configure between SW1 and SW2 Eth-trunk in LACP mode with load balance traffic based on source and destination MAC address.
+
+### LSW1, LSW2
+```
+interface Eth-Trunk 1 
+mode lacp
+load-balance src-dst-mac
+trunkport gigabitethernet 0/0/12 
+trunkport gigabitethernet 0/0/13
+quit
+sysname ####ENTER_NAME###
+```
+
+2.Configure the link type of interfaces connecting between all switches to trunk, and configure the interfaces to allow packets of all VLANs except VLANs 1, 100, 200 to pass through.
+
+```
+### Все SW
+vlan batch 10 11 12 100 200
+
+### Включаем защиту от рута на CORE LSW1, LSW2
+int gi 0/0/1
+stp root-protection 
+quit
+int gi 0/0/2
+stp root-protection 
+quit
+
+### На ACCESS SW LSW3, LSW4
+stp bpdu-protection
+sysname ####ENTER_NAME###
+
+### Конфигаем Eth-Trunk 1, и все Uplinks
+interface Eth-Trunk 1 
+
+port link-type trunk
+undo port trunk allow-pass vlan all
+port trunk allow-pass vlan all
+undo port trunk allow-pass vlan 100
+undo port trunk allow-pass vlan 200
+undo port trunk allow-pass vlan 1
+port trunk pvid vlan 10
+quit
+```
+
+3.Configure all switches to run MSTP. 
+
+```
+stp region-configuration
+instance 11 vlan 11
+instance 12 vlan 12
+active region-configuration 
+quit 
+```
+
+3.1 Configure the mapping between VLAN 11 and MSTI 11, and configure SW1 as primary root bridge and SW2 as secondary root bridge. 
+```
+LSW1
+stp instance 11 root primary
+stp instance 12 root secondary
+
+SW3
+interface gigabitethernet 0/0/2
+stp instance 11 cost 20000
+quit
+```
+3.2 Configure the mapping between VLAN 12 and MSTI12, and configure SW2 as the primary root bridge and SW1 as secondary root bridge. 
+```
+LSW2
+stp instance 12 root primary
+stp instance 11 root secondary
+
+SW4
+interface gigabitethernet 0/0/2
+stp instance 12 cost 20000
+quit
+```
+
+
+3.3 Set the MST region name to LAB, and set the revision level of the MST region to 5.
+```
+### На всех SW
+stp region-configuration
+region-name LAB 
+revision-level 5
+active region-configuration
+
+### Включение на всех SW проприетарщины HUA для расчета pathcost
+stp pathcost-standard legacy
+```
+Иллюстрация того, как здорово все сошлось
+![](pictures/10.jpg)
+
+
+4. On all other interfaces except the interconnection interfaces between switches configure edge ports.
+```
+LSW1, LSW2
+port-group test
+group-member gi 0/0/3 to GigabitEthernet 0/0/4 GigabitEthernet 0/0/6 to GigabitEthernet 0/0/11 GigabitEthernet 0/0/14 to GigabitEthernet 0/0/24
+stp edged-port enable
+quit
+
+LSW3, LSW4
+port-group test
+group-member gi 0/0/4 to GigabitEthernet 0/0/24
+stp edged-port enable
+quit
+
+interface GigabitEthernet0/0/3
+ port link-type access
+ port default vlan ### VLAN № ###
+```
+
+5.0 Предварительные настройки на RR
+```
+AR1
+sysname AR1
+int lo0
+ip add	200.1.1.1 32
+quit
+
+int gi 0/0/2
+ip add	192.168.113.1 24
+quit
+int gi 0/0/1 
+undo shut
+int gi 0/0/1.11
+dot1q termination vid 11
+ip add 192.168.11.101 24
+arp broad ena
+undo shut
+quit
+
+int gi 0/0/1.12
+dot1q termination vid 12
+ip add 192.168.12.101 24
+arp broad ena
+undo shut
+quit
+
+int gi 0/0/0
+ip add	192.168.112.1 24
+quit
+
+AR2 - аналогично
+AR3 - даже не заслуживает внимания
+```
+arp broad ena - на сабах была самая большая проблема, из-за нее не работал нормально ping с рабочих станций
+
+
+5. Configure VRRP group  on R1 and R2 is assigned the virtual IP address 192.168.11.1, and functions as the gateway for PC1. R1 periodically sends gratuitous ARP packets with sender IP address as 192.168.11.1 and source MAC address as 00-00-5E-00-01-0B. The data frames transmitted between PC1 and the gateway are tagged with VLAN 11 (PC sends and receives untagged frames).
+
+```
+AR1
+int gi 0/0/1.11
+vrrp vrid 11 virtual-ip 192.168.11.1      ### ip addr VVRP gr 11 (by MAC)
+vrrp vrid 11 priority 120                 ### more than default 100
+## vrrp vrid 11 track int gi 0/0/1.11 reduce 30 ###
+quit
+
+AR2
+interface GigabitEthernet 0/0/1.11
+vrrp vrid 11 virtual-ip 192.168.11.1 
+
+
+### Чекаем VRRP на одном крыле, без балансировки
+display vrrp
+```
+
+
+6. Configure VRRP group  on R1 and R2 is assigned the virtual IP address 192.168.12.1, and functions as the gateway for PC2. R2 periodically sends gratuitous ARP packets with sender IP address as 192.168.12.1 and source MAC address as 00-00-5E-00-01-0C. The data frames transmitted between PC2 and the gateway are tagged with VLAN 12 (PC sends and receives untagged frames).
+
+```
+AR1
+int gi 0/0/1.12
+vrrp vrid 12 virtual-ip 192.168.12.1 ### ip addr VVRP gr 12 (by MAC)
+
+
+AR2
+int gi 0/0/1.12
+vrrp vrid 12 virtual-ip 192.168.12.1 
+vrrp vrid 12 priority 120                 ### more than default 100
+## vrrp vrid 12 track int gi 0/0/1.12 reduce 30 ###
+quit
+
+```
+![](pictures/08.jpg)
+
+7. The router acting as the VRRP master should become master again 3 minute after interface GE0/0/1 goes Up.
+
+```
+AR1
+int gi 0/0/1.11
+vrrp vrid 11 preempt-mode timer delay 180 ###180 sec dealy before preempt
+quit
+
+AR2
+int gi 0/0/1.12
+vrrp vrid 12 preempt-mode timer delay 180 ###180 sec dealy before preempt
+quit
+```
+![](pictures/11.jpg)
+
+8.Configure on R1, R2, R3 OSPF for links between routers and loopbacks interfaces. Disable loopbacks interfaces from sending and  receiving ospf hello packets.
+
+```
+AR3 - юанально задаем сети
+
+AR1 ### включаем OSPF2, импортируем коннектед и зададим ACL для нужных подсетей
+ospf 1 router-id 1.1.1.1 
+ import-route direct
+ area 0.0.0.0 
+  network 192.168.112.0 0.0.0.255 
+  network 192.168.113.0 0.0.0.255 
+  network 200.1.1.1 0.0.0.0 
+quit
+
+AR2 - аналогично AR3
+
+### Чекаем как и чего взлетело
+display ospf peer brief
+```
+И вот так у нас ходит трафик
+![](pictures/12.jpg)
+
+Позже как-нибудь попробовать настроить NAT 

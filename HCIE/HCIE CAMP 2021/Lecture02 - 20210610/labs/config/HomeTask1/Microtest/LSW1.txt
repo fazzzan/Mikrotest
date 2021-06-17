@@ -1,0 +1,156 @@
+sysname LSW1
+#
+vlan batch 10 to 12 100 200
+#
+stp instance 11 root primary
+stp instance 12 root secondary
+stp pathcost-standard legacy
+#
+cluster enable
+ntdp enable
+ndp enable
+#
+drop illegal-mac alarm
+#
+diffserv domain default
+#
+stp region-configuration
+ region-name LAB
+ revision-level 5
+ instance 11 vlan 11
+ instance 12 vlan 12
+ active region-configuration
+#
+drop-profile default
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password simple admin
+ local-user admin service-type http
+#
+interface Vlanif1
+#
+interface MEth0/0/1
+#
+interface Eth-Trunk1
+ port link-type trunk
+ port trunk pvid vlan 10
+ undo port trunk allow-pass vlan 1
+ port trunk allow-pass vlan 2 to 99 101 to 199 201 to 4094
+ mode lacp-static
+ load-balance src-dst-mac
+#
+interface GigabitEthernet0/0/1
+ port link-type trunk
+ port trunk pvid vlan 10
+ undo port trunk allow-pass vlan 1
+ port trunk allow-pass vlan 2 to 99 101 to 199 201 to 4094
+ stp root-protection
+#
+interface GigabitEthernet0/0/2
+ port link-type trunk
+ port trunk pvid vlan 10
+ undo port trunk allow-pass vlan 1
+ port trunk allow-pass vlan 2 to 99 101 to 199 201 to 4094
+ stp root-protection
+#
+interface GigabitEthernet0/0/3
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/4
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/5
+ port link-type trunk
+ port trunk pvid vlan 10
+ undo port trunk allow-pass vlan 1
+ port trunk allow-pass vlan 2 to 99 101 to 199 201 to 4094
+#
+interface GigabitEthernet0/0/6
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/7
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/8
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/9
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/10
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/11
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/12
+ eth-trunk 1
+#
+interface GigabitEthernet0/0/13
+ eth-trunk 1
+#
+interface GigabitEthernet0/0/14
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/15
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/16
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/17
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/18
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/19
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/20
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/21
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/22
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/23
+ stp edged-port enable
+#
+interface GigabitEthernet0/0/24
+ stp edged-port enable
+#
+interface NULL0
+#
+user-interface con 0
+user-interface vty 0 4
+#
+port-group test
+ group-member GigabitEthernet0/0/3
+ group-member GigabitEthernet0/0/4
+ group-member GigabitEthernet0/0/6
+ group-member GigabitEthernet0/0/7
+ group-member GigabitEthernet0/0/8
+ group-member GigabitEthernet0/0/9
+ group-member GigabitEthernet0/0/10
+ group-member GigabitEthernet0/0/11
+ group-member GigabitEthernet0/0/14
+ group-member GigabitEthernet0/0/15
+ group-member GigabitEthernet0/0/16
+ group-member GigabitEthernet0/0/17
+ group-member GigabitEthernet0/0/18
+ group-member GigabitEthernet0/0/19
+ group-member GigabitEthernet0/0/20
+ group-member GigabitEthernet0/0/21
+ group-member GigabitEthernet0/0/22
+ group-member GigabitEthernet0/0/23
+ group-member GigabitEthernet0/0/24
+#
+return
