@@ -1,10 +1,13 @@
-<R2>displ curr
 [V200R003C00]
 #
- sysname R2
+ sysname R3
 #
  snmp-agent local-engineid 800007DB03000000000000
  snmp-agent 
+#
+acl ipv6 number 2000  
+ rule 5 deny source 2006::/64 
+ rule 10 permit 
 #
  clock timezone China-Standard-Time minus 08:00:00
 #
@@ -26,22 +29,23 @@ aaa
  local-user admin service-type http
 #
 ospfv3 1
- router-id 2.2.2.2
+ router-id 3.3.3.3
+ filter-policy 2000 import
+ import-route direct
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
- ipv6 enable 
- ipv6 address 2012::2/64 
- ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2024::2/64 
- ospfv3 1 area 0.0.0.3
+ ipv6 address 2013::3/64 
+ ospfv3 1 area 0.0.0.2
 #
 interface GigabitEthernet0/0/2
+ ipv6 enable 
+ ipv6 address 2001::1/64 
 #
 interface NULL0
 #

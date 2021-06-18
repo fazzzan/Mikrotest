@@ -3,26 +3,37 @@ sysname R1
 ipv6
  
 ### Настроим сразу IPv4 на outside и IPv6 на Inside
-interface GigabitEthernet 0/0/1
-ip address 200.1.1.1 24 
-quit
-
 interface GigabitEthernet0/0/2
 ipv6 enable
-ipv6 address 2002:C801:0101::FFFF/64
+ipv6 address 2015::1 64
 quit
 
-### статика во вне IPv4
-ip route-static 0.0.0.0 0.0.0.0 200.1.1.2
-
-
-### 6to4 tunnel
-interface Tunnel 0/0/0 
-tunnel-protocol ipv6-ipv4 6to4 
+interface GigabitEthernet0/0/0
 ipv6 enable
-source 200.1.1.1
-ipv6 address auto link-local
+ipv6 address 2012::1 64
 quit
 
-### статика IPv6 до Inside подсети R2
-ipv6 route-static 2002:C802:0202:: 64 Tunnel 0/0/0
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2013::1 64
+quit
+
+### OSPFv3 1
+ospfv3 1
+router-id 1.1.1.1
+quit
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/2
+ospfv3 1 area 1
+quit
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/0
+ospfv3 1 area 0
+quit
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/1
+ospfv3 1 area 2
+quit

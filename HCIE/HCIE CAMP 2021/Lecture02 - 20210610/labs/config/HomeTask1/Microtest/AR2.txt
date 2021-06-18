@@ -51,6 +51,7 @@ interface LoopBack0
  ip address 200.2.2.1 255.255.255.255 
 #
 ospf 1 router-id 2.2.2.2 
+ silent-interface LoopBack0
  import-route direct
  area 0.0.0.0 
   network 192.168.112.0 0.0.0.255 

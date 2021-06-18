@@ -1,0 +1,83 @@
+sysname RTB
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher xFGy!u#T*%=H)H2[EInB1ny#
+ local-user admin service-type http
+#
+isis 1
+ network-entity 01.0000.0000.0002.00
+ import-route isis level-2 into level-1
+ #
+ ipv6 enable topology standard
+ #
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable
+ ip address 10.1.1.2 255.255.255.252
+ ipv6 address 2000::2/64
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-2
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ip address 10.2.1.1 255.255.255.252
+ ipv6 address 2003::1/64
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-1
+#
+interface GigabitEthernet0/0/2
+ ipv6 enable
+ ip address 10.1.3.1 255.255.255.252
+ ipv6 address 2002::1/64
+ isis enable 1
+ isis ipv6 enable 1
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface LoopBack0
+ ipv6 enable
+ ip address 2.2.2.2 255.255.255.255
+ ipv6 address 2222::2/128
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-2
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

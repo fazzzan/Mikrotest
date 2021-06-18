@@ -1,4 +1,4 @@
- sysname R3
+ sysname R2
 #
  snmp-agent local-engineid 800007DB03000000000000
  snmp-agent 
@@ -22,13 +22,9 @@ aaa
  local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
  local-user admin service-type http
 #
-ospfv3 2
- router-id 30.30.30.30
- import-route ospfv3 3
-#
 ospfv3 3
- router-id 30.30.30.30
- import-route ospfv3 2
+ router-id 20.20.20.20
+ import-route direct
 #
 firewall zone Local
  priority 15
@@ -37,13 +33,12 @@ interface GigabitEthernet0/0/0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2000::2/64 
- ospfv3 2 area 0.0.0.0
+ ipv6 address 2001::2/64 
+ ospfv3 3 area 0.0.0.0
 #
 interface GigabitEthernet0/0/2
  ipv6 enable 
- ipv6 address 2001::2/64 
- ospfv3 3 area 0.0.0.1
+ ipv6 address 2004::1/64 
 #
 interface NULL0
 #

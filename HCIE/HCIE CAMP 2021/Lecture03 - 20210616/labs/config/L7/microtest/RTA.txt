@@ -1,0 +1,87 @@
+sysname RTA
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher ES]wG-:E1@@X,k6.E\Z,xn{#
+ local-user admin service-type http
+#
+isis 1
+ is-level level-2
+ network-entity 02.0000.0000.0001.00
+ import-route static route-policy 200
+ #
+ ipv6 enable topology standard
+ #
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ip address 10.1.1.1 255.255.255.252
+ ipv6 address 2000::1/64
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-2
+#
+interface GigabitEthernet0/0/2
+ ipv6 enable
+ ip address 10.1.2.1 255.255.255.252
+ ipv6 address 2001::1/64
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-2
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface LoopBack0
+ ipv6 enable
+ ip address 1.1.1.1 255.255.255.255
+ ipv6 address 1111::1/128
+ isis enable 1
+ isis ipv6 enable 1
+ isis circuit-level level-2
+#
+route-policy 200 permit node 10
+ if-match ip-prefix 200
+#
+ip ip-prefix 200 index 10 permit 200.1.1.1 32
+#
+ip route-static 100.1.1.1 255.255.255.255 NULL0
+ip route-static 200.1.1.1 255.255.255.255 NULL0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

@@ -1,0 +1,46 @@
+system-view 
+sysname R4
+ipv6
+ 
+### Настроим сразу IPv4 на outside и IPv6 на Inside
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2024::4 64
+quit
+
+interface GigabitEthernet0/0/0
+ipv6 enable
+ipv6 address 2006::1 64
+quit
+
+interface GigabitEthernet0/0/2
+ipv6 enable
+ipv6 address 2003::1 64
+quit
+
+### OSPFv3 1
+ospfv3 1
+router-id 4.4.4.4
+quit
+
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/1
+ospfv3 1 area 3
+quit
+
+### импортируем коннектед маршруты
+ospfv3 1
+import-route direct
+quit
+
+# Filter routes on R4 to prevent R&D Dept. 1 and After-sales Service Dept. from accessing the network segment of Marketing Dept. 2. 
+
+acl ipv6 2000 
+rule deny source 2004:: 64 
+rule permit 
+quit 
+
+ospfv3 1 
+filter-policy 2000 import 
+quit 

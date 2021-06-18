@@ -234,7 +234,7 @@ quit
 AR3
 ### включаем OSPF2, импортируем коннектед и зададим ACL для нужных подсетей
 ospf 1 router-id 3.3.3.3
-silent-interface loo 0
+silent-interface LoopBack0
 area 0
 network 200.3.3.1 0.0.0.0
 network 192.168.113.0 0.0.0.255
@@ -244,6 +244,7 @@ quit
 AR1
 ### включаем OSPF2, импортируем коннектед и зададим ACL для нужных подсетей
 ospf 1 router-id 1.1.1.1 
+silent-interface LoopBack0
  import-route direct
  area 0.0.0.0 
   network 192.168.112.0 0.0.0.255 
@@ -254,6 +255,7 @@ quit
 AR2
 ### включаем OSPF2, импортируем коннектед и зададим ACL для нужных подсетей
 ospf 1 router-id 2.2.2.2 
+silent-interface LoopBack0
  import-route direct
  area 0.0.0.0 
   network 192.168.112.0 0.0.0.255 
