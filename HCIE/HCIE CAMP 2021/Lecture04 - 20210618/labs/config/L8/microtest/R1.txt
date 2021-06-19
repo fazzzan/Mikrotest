@@ -1,0 +1,165 @@
+[V200R003C00]
+#
+ sysname R1
+#
+ board add 0/2 4GET 
+#
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
+#
+ clock timezone China-Standard-Time minus 08:00:00
+#
+portal local-server load flash:/portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ info-center source DS channel 0 log state off  trap state off
+#
+ipv6 
+#
+router id 10.0.1.1 
+#
+ wlan ac-global carrier id other ac id 0
+#
+ set cpu-usage threshold 80 restore 75
+#
+aaa 
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
+ local-user admin service-type http
+#
+ospfv3 1
+ router-id 10.0.1.1
+#
+firewall zone Local
+ priority 15
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable 
+ ip address 10.0.12.1 255.255.255.0 
+ ipv6 address 2000::1201/120 
+ ospfv3 1 area 0.0.0.0
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable 
+ ip address 10.0.13.1 255.255.255.0 
+ ipv6 address 2000::1301/120 
+ ospfv3 1 area 0.0.0.0
+#
+interface GigabitEthernet0/0/2
+#
+interface GigabitEthernet2/0/0
+ ipv6 enable 
+ ip address 10.0.14.1 255.255.255.0 
+ ipv6 address 2000::1401/120 
+#
+interface GigabitEthernet2/0/1
+ ipv6 enable 
+ ip address 10.0.16.1 255.255.255.0 
+ ipv6 address 2000::1601/120 
+#
+interface GigabitEthernet2/0/2
+#
+interface GigabitEthernet2/0/3
+#
+interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.1.1 255.255.255.255 
+ ipv6 address 2000::1/128 
+ ospfv3 1 area 0.0.0.0
+#
+bgp 100
+ router-id 10.0.1.1
+ peer 10.0.2.2 as-number 100 
+ peer 10.0.2.2 connect-interface LoopBack0
+ peer 10.0.3.3 as-number 100 
+ peer 10.0.3.3 connect-interface LoopBack0
+ peer 10.0.4.4 as-number 200 
+ peer 10.0.4.4 ebgp-max-hop 2 
+ peer 10.0.4.4 connect-interface LoopBack0
+ peer 10.0.16.6 as-number 400 
+ peer 2000::2 as-number 100 
+ peer 2000::2 connect-interface LoopBack0
+ peer 2000::3 as-number 100 
+ peer 2000::3 connect-interface LoopBack0
+ peer 2000::4 as-number 200 
+ peer 2000::4 ebgp-max-hop 2 
+ peer 2000::4 connect-interface LoopBack0
+ peer 2000::1606 as-number 400 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.1.1 255.255.255.255 
+  network 10.0.2.2 255.255.255.255 
+  network 10.0.3.3 255.255.255.255 
+  peer 10.0.2.2 enable
+  peer 10.0.2.2 next-hop-local 
+  peer 10.0.3.3 enable
+  peer 10.0.3.3 next-hop-local 
+  peer 10.0.4.4 enable
+  peer 10.0.4.4 as-path-filter from_as_400 export 
+  peer 10.0.16.6 enable
+  peer 10.0.16.6 as-path-filter from_as_200 export 
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::1 128 
+  network 2000::2 128 
+  network 2000::3 128 
+  peer 2000::2 enable
+  peer 2000::2 next-hop-local 
+  peer 2000::3 enable
+  peer 2000::3 next-hop-local 
+  peer 2000::4 enable
+  peer 2000::4 route-policy R4_import import
+  peer 2000::1606 enable
+  peer 2000::1606 route-policy R6_import import
+#
+ospf 1 router-id 1.1.1.1 
+ silent-interface LoopBack0
+ silent-interface GigabitEthernet2/0/0
+ silent-interface GigabitEthernet2/0/1
+ area 0.0.0.0 
+  network 10.0.1.1 0.0.0.0 
+  network 10.0.12.0 0.0.0.255 
+  network 10.0.13.0 0.0.0.255 
+#
+route-policy R4_import permit node 10 
+ if-match ipv6 address prefix-list R4_import 
+ apply local-preference 150 
+ apply cost 10
+#
+route-policy R4_import permit node 20 
+#
+route-policy R6_import permit node 10 
+ if-match ipv6 address prefix-list R6_import 
+ apply local-preference 150 
+#
+route-policy R6_import permit node 20 
+#
+ip as-path-filter from_as_400 deny _400_
+ip as-path-filter from_as_400 permit .*
+ip as-path-filter from_as_200 deny _200_
+ip as-path-filter from_as_200 permit .*
+#
+ip route-static 10.0.4.4 255.255.255.255 10.0.14.4
+#
+ipv6 route-static 2000::4 128 2000::1404 
+#
+ip ipv6-prefix R4_import index 10 permit 2000:0:0:51:: 64
+ip ipv6-prefix R6_import index 10 permit 2000:0:0:52:: 64
+#
+user-interface con 0
+ authentication-mode password
+user-interface vty 0 4
+user-interface vty 16 20
+#
+wlan ac
+#
+return

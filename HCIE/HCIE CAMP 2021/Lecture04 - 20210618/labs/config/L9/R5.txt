@@ -1,0 +1,63 @@
+system-view 
+sysname R5
+ipv6
+ 
+### Настроим сразу IPv4 на outside и IPv6 на Inside
+interface GigabitEthernet0/0/2
+ipv6 enable
+ipv6 address 2015::5 64
+quit
+
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2056::5 64
+quit
+
+### OSPFv3 1
+ospfv3 1
+router-id 5.5.5.5
+quit
+
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/2
+ospfv3 1 area 1
+quit
+
+displa	ospfv nei
+
+### включаем IS-IS 1 на IF
+isis 1
+ipv6 enable
+is-level level-1-2
+network-entity 10.0000.0000.0005.00
+quit
+
+interface GigabitEthernet0/0/1
+isis ipv6 enable
+quit
+
+display isis peer
+
+### Импорт IS-ISv6 маршрутов в OSPFv3 и наоборот
+ospfv3 1
+import-route isis 1
+quit
+
+isis 1
+ipv6 import-route ospfv3 1
+quit
+
+
+# Filter the imported routes on R5 to prevent R&D Dept. 2 from accessing the network segments of Marketing Dept., R&D Dept. 1 and After-Sales Service Dept.
+
+
+acl ipv6 2000 
+rule deny source 2005:: 64 
+rule permit 
+quit 
+
+ospfv3 1 
+filter-policy 2000 export 
+quit 
+

@@ -1,0 +1,67 @@
+#
+sysname R7
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher I@qZ>s3UmQpe}@HMNPn@U=a#
+ local-user admin service-type http
+#
+isis 1
+ is-level level-1
+ network-entity 10.0000.0000.0007.00
+ #
+ ipv6 enable topology standard
+ ipv6 import-route direct level-1
+ #
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable
+ ipv6 address 2004::1/64
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ipv6 address 2005::1/64
+#
+interface GigabitEthernet0/0/2
+ ipv6 enable
+ ipv6 address 2067::7/64
+ isis ipv6 enable 1
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

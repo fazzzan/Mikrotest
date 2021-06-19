@@ -1,0 +1,115 @@
+[V200R003C00]
+#
+ sysname R2
+#
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
+#
+ clock timezone China-Standard-Time minus 08:00:00
+#
+portal local-server load flash:/portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ipv6 
+#
+router id 10.0.2.2 
+#
+ wlan ac-global carrier id other ac id 0
+#
+ set cpu-usage threshold 80 restore 75
+#
+aaa 
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
+ local-user admin service-type http
+#
+ospfv3 1
+ router-id 10.0.2.2
+#
+firewall zone Local
+ priority 15
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Ethernet0/0/2
+#
+interface Ethernet0/0/3
+#
+interface Ethernet0/0/4
+#
+interface Ethernet0/0/5
+#
+interface Ethernet0/0/6
+#
+interface Ethernet0/0/7
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable 
+ ip address 10.0.12.2 255.255.255.0 
+ ipv6 address 2000::1202/120 
+ ospfv3 1 area 0.0.0.0
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable 
+ ip address 10.0.23.2 255.255.255.0 
+ ipv6 address 2000::2302/120 
+ ospfv3 1 area 0.0.0.0
+#
+interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.2.2 255.255.255.255 
+ ipv6 address 2000::2/128 
+ ospfv3 1 area 0.0.0.0
+#
+interface LoopBack10
+ ipv6 enable 
+ ipv6 address 2000:0:0:21::1/64 
+#
+bgp 100
+ router-id 10.0.2.2
+ peer 10.0.1.1 as-number 100 
+ peer 10.0.1.1 connect-interface LoopBack0
+ peer 10.0.3.3 as-number 100 
+ peer 10.0.3.3 connect-interface LoopBack0
+ peer 2000::1 as-number 100 
+ peer 2000::1 connect-interface LoopBack0
+ peer 2000::3 as-number 100 
+ peer 2000::3 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.2.2 255.255.255.255 
+  peer 10.0.1.1 enable
+  peer 10.0.3.3 enable
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::2 128 
+  network 2000:0:0:21:: 64 
+  peer 2000::1 enable
+  peer 2000::3 enable
+#
+ospf 1 router-id 10.0.2.2 
+ silent-interface LoopBack0
+ area 0.0.0.0 
+  network 10.0.2.2 0.0.0.0 
+  network 10.0.12.0 0.0.0.255 
+  network 10.0.23.0 0.0.0.255 
+#
+user-interface con 0
+ authentication-mode password
+user-interface vty 0 4
+user-interface vty 16 20
+#
+wlan ac
+#
+return

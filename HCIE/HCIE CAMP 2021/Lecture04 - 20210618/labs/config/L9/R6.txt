@@ -1,0 +1,36 @@
+system-view 
+sysname R6
+ipv6
+ 
+### Настроим сразу IPv4 на outside и IPv6 на Inside
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2056::6 64
+quit
+
+interface GigabitEthernet0/0/2
+ipv6 enable
+ipv6 address 2067::6 64
+quit
+
+### включаем IS-IS 1 на IF
+isis 1
+ipv6 enable
+is-level level-1-2
+network-entity 10.0000.0000.0006.00
+quit
+
+interface GigabitEthernet0/0/1
+isis ipv6 enable
+quit
+interface GigabitEthernet0/0/2
+isis ipv6 enable
+quit
+
+display isis peer
+
+### Объявим дефолтный маршрут чтобы R7 мог выйти вовне
+
+isis 1
+ipv6 default-route-advertise level-1 
+quit 

@@ -1,11 +1,11 @@
-20210616
+20210619
 
 Оглавление HCIE-R&S+Lab+Guide+v3.0.pdf - стр. 05
 
 Лабораторки 05, 06, 07
 
-___ЛР05___
-стр. 61 HCIE-R&S+Lab+Guide+v3.0.pdf
+___ЛР08___
+стр. 120 HCIE-R&S+Lab+Guide+v3.0.pdf
 
 Дизайн, Адресация - на картинках ниже.
 
@@ -13,94 +13,52 @@ ___ЛР05___
 ![](pictures/02.jpg)
 
 ![](pictures/03.jpg)
+![](pictures/04.jpg)
 
 ## ЗАДАНИЕ ##
-1. Настроить IPv6 на узлах PC1, PC2, R1, R2 и R3: на L3 линкАх должна появиться связность IPv6. 
-2. Настроить OSPFv3 процесс 2 на R1 и R3, а также OSPFv3 процесс 3 для R2 и R3. 
-3. на R3, настроить импорт маршрутов OSPFv3 процессов для того, чтобы PC1 мог связаться с PC2. 
+1. Назначим IPv4 и IPv6 на все IF устройств. 
+2. Используем OSPFv2 и OSPFv3 как IGP в AS 100
+   - на IF настраиваем только ospfv3
+   - в ospfv2 публикуем подсети, включая IF lo0
+3. Для всех AS настроить пиринг IBGP или EBGP между устройствами с общим линкОм. Исползовать IP addresses IF loopback в качестве update source для установки IBGP пиринга в AS 100. R1 и R4 также должны использовать loopback IF для установки  EBGP пиринга с использованием статических маршрутов. (настройка IPv6 BGP пиринга такая же.) Не забываем про необходимость включения IPv4/IPv6 контекстов.
+4. Разослать все сети (Ipv4, IPv6) всех IF loopback 0 и добиться того, чтобы все  loopback IF топологии BGP  имели связность друг с другом. 
+5. Отфильтруйте маршруты. AS 100 не должна рассылать маршруты о которых она узнавала от AS 400 и рассылала на AS200. 
+6. Выбор маршрутов: Роутеры в AS 100 предпочитают ___paths passing___ через AS 200 для доступа к 2000:0:0:51::1/64, и выбирают ___paths passing___ через AS 400 к 2000:0:0:51::2/64. 
 
 ## Решение ##
 
-Конфиги для R1, R2, R3- банальны и практически совпадают, различиется лишь настройка соответствующего процесса OSPF
+R1 перед фильтрацией маршрутов от AS 400
+![](pictures/05.jpg)
 
-Настройка IPv6
+AS200 - R4 до и после фильтрации маршрутов от AS 400, которые рассылались через AS 100
 
-```
-Сброс
-reset saved-config
+![](pictures/06.jpg)
 
-Группа портов
-port-group ITPorts
-group-member gi x/x/x to gi y/y/y
+AS300 - R5 до и после фильтрации маршрутов от AS 400, которые рассылались через AS 100
+
+![](pictures/07.jpg)
+
+AS400 - R6 до и после фильтрации маршрутов от AS 200, которые рассылались через AS 100
+
+![](pictures/11.jpg)
+
+Маршруты в подсетки ipv6 до и после задания предпочтительного AS-PATH (увеличили вес при импорте от 2000::4)
+
+![](pictures/08.jpg)
+![](pictures/09.jpg)
+![](pictures/10.jpg)
+
+проверка tracdert с R3
+![](pictures/12.jpg)
 
 
-system-view 
-sysname R1
-ipv6
- 
-### Настроим сразу IPv6 на Outside и Inside
-interface GigabitEthernet0/0/2
-ipv6 enable
-ipv6 address 2003::1 64
-quit
-
-interface GigabitEthernet 0/0/1
-ipv6 enable
-ipv6 address 2000::1 64 
-quit
-```
-
-Настройка OSPFv3 - лучше, чем у старой версии v2, где надо адвертайзить сети
-
-```
-### OSPFv3 2
-ospfv3 2
-router-id 10.10.10.10
-quit
-
-### включаем OSPFv3 2 на IF
-interface GigabitEthernet0/0/1
-ospfv3 2 area 0
-quit
-
-### импортируем коннектед маршруты
-ospfv3 2
-import-route direct
-quit
-```
-
-Настройка OSPFv3 и редистрибуция маршрутов из разных процессов на R3
-```
-### OSPFv3 2
-ospfv3 2
-router-id 31.31.31.31
-quit
-
-### OSPFv3 3
-ospfv3 3
-router-id 32.32.32.32
-quit
-
-### включаем OSPFv3 2 на IF
-interface GigabitEthernet0/0/1
-ospfv3 2 area 0
-quit
-
-### включаем OSPFv3 3 на IF
-interface GigabitEthernet0/0/2
-ospfv3 3 area 0
-quit
-
-### импортируем маршруты из ospf второго Process-ID
-ospfv3 2
-import-route ospfv3 3
-quit
-
-ospfv3 3
-import-route ospfv3 2
-quit
-```
-Конфиги по задаче тут: [R1](config/L4/R1.txt), [R2](config/L4/R2.txt), [R3](config/L4/R3.txt)
+Конфиги по задаче тут: 
+[R1](config/L8/R1.txt), 
+[R2](config/L8/R2.txt), 
+[R3](config/L8/R3.txt), 
+[R4](config/L8/R3.txt), 
+[R5](config/L8/R3.txt), 
+[R6](config/L8/R3.txt)
 
 
 
