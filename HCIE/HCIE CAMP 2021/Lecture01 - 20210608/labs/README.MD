@@ -297,3 +297,5 @@ quit
 on R3 and R4 - сессия поднялась: просто копипастить нельзя, так как нужно подтверждение о смене типа на ___hdlc___
 
 ![](pictures/23.jpg)
+
+Конфиги по задаче тут: [BranchR1](config/L2/BranchR1.txt), [R2](config/L2/R2.txt), [R3](config/L2/R3.txt), [HQR4](config/L2/HQR4.txt)
