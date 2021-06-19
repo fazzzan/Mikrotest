@@ -34,7 +34,7 @@ https://support.huawei.com/enterprise/en/doc/EDOC1100055099/70e83769/bgp-route-s
 
 
 
-Л/Р XX, XX - самостоятельно
+Л/Р 06, 07 - самостоятельно
 
 Л/Р 8 - 
 +

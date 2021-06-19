@@ -1,5 +1,7 @@
 20210608
 
+Оглавление HCIE-R&S+Lab+Guide+v3.0.pdf - стр. 05
+
 # Задача Lab3: #
 Настроить IPv6 прохождение трафика в туннеле. Дизайн, Адресация - на картинке ниже.
 
@@ -279,7 +281,7 @@ quit
 AR2 - аналогично
 AR3 - даже не заслуживает внимания
 ```
-arp broad ena - на сабах была самая большая проблема, из-за нее не работал нормально ping с рабочих станций
+___arp broad ena___ - на сабах была самая большая проблема, из-за нее не работал нормально ping с рабочих станций
 
 
 5. Configure VRRP group  on R1 and R2 is assigned the virtual IP address 192.168.11.1, and functions as the gateway for PC1. R1 periodically sends gratuitous ARP packets with sender IP address as 192.168.11.1 and source MAC address as 00-00-5E-00-01-0B. The data frames transmitted between PC1 and the gateway are tagged with VLAN 11 (PC sends and receives untagged frames).

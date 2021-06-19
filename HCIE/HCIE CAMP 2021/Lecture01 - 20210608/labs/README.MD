@@ -1,37 +1,39 @@
 20210608
 
+Оглавление HCIE-R&S+Lab+Guide+v3.0.pdf - стр. 05
+
+Лабораторки 01, 02
+
+___ЛР01___
+стр. 17 HCIE-R&S+Lab+Guide+v3.0.pdf
+
+Дизайн, Адресация - на картинках ниже.
+
 ![](pictures/01.jpg)
+![](pictures/02.jpg)
 
-Задача:
-сконфигурировать MSTP, и разнести по разным рутам разные VLAN
+## ЗАДАНИЕ ##
+1. Настройка MSTP функционала на всех SW. На ACCESS, порты сотрящие на PCs не должны участоввать в MSTP и их конфигурить в edge ports. 
+2. Настроить базовую защиту линков. Например, настроить root protection для designated ports у root bridge в каждом MSTI. 
+3. Настроить функционал Layer 2 forwarding на SW. 
 
+## Решение ##
+
+Сброс и настройка группы портов
 ```
-Сброс
 reset saved-config
 
-Группа портов
 port-group ITPorts
 group-member gi 0/0/2 to gi 0/0/3
+```
 
+Настройки SW практически одинаковы.
+```
 system-view 
 sysname SwitchA 
  
 ### Добавляем VLAN
 vlan batch 2 to 20
-
-### Конфигурим Eth-trunk 1 из двух IF
-interface Eth-Trunk 1 
-trunkport gigabitethernet 0/0/2 
-trunkport gigabitethernet 0/0/3 
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20
-quit
-
-### Транк на аплинке
-interface gigabitethernet 0/0/1
-port link-type trunk 
-port trunk allow-pass vlan 2 to 20 
-quit 
 
 ### Конфигурируем MST регион
 stp region-configuration
@@ -40,31 +42,72 @@ instance 1 vlan 2 to 10
 instance 2 vlan 11 to 20 
 active region-configuration 
 quit 
+```
 
-### Задаем ROOT для соответствующего MSTI (на втором свиче - наоборот)
+Задаем в CORE SWC - ROOT для MSTI instance 1 (на SWB - наоборот)
+```
 stp instance 1 root primary
 stp instance 2 root secondary
+```
 
+Включение проприетарщины HUA для корректного расчета pathcost и на ACCESS SWC, SWD - ___отравляем___ линк на соответствующий instance MSTI, чтобы он гулял на нужного ROOT
+```
+stp pathcost-standard legacy
+
+### Делаем максимальной стоимость пути для MSTI2, чтобы порт проигрывал при расчете MSTP
+interface gigabitethernet 0/0/2
+stp instance 2 cost 20000
+quit
+
+### Включаем STP
+stp enable
+```
+
+Защита линков
+- Безопасность для CORE: Включение Security на DP у рута вниз, к ACCESS-SW
+```
+interface gigabitethernet 0/0/1
+stp root-protection
+quit
+```
+
+- Безопасность для ACCESS: обязатeльно обе команды совместно
+```
+### Глобально
+stp bpdu-protection
+### Заблочить данный порт, если получишь BPDU (обязательно stp bpdu-protection), а также исключить его из MST расчетов
+interface gigabitethernet 0/0/1 
+stp edged-port enable
+quit
+
+### Активтируем на порту VLAN2
+interface gigabitethernet 0/0/1
+port link-type access
+port default vlan 2
+quit 
+```
+
+Включение функционала Forwarding L2: в базовом конфиге на CORE настраиваем Eth-trunk 1 из двух IF и уже на всех SW делаем соответствующие транки на аплинках
+```
+interface Eth-Trunk 1 
+trunkport gigabitethernet 0/0/2 
+trunkport gigabitethernet 0/0/3 
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20
+quit
+
+### Транк на аплинках
+interface gigabitethernet 0/0/1
+port link-type trunk 
+port trunk allow-pass vlan 2 to 20 
+quit 
 ```
 
 Видно как уже работает MSTP для разных MSTI: рутом делается сосед
 
 ![](pictures/03.jpg)
 
-```
-
-### Включение проприетарщины HUA для расчета pathcost
-stp pathcost-standard legacy
-
-### Включение Security на DP у рута вниз, к ACCESS-SW
-interface gigabitethernet 0/0/1
-stp root-protection
-quit
-
-### Включаем STP
-stp enable
-```
-проверка:
+Проверка:
 Видно работу за регион
 ```displa stp region-configuration```
 ![](pictures/04.jpg)
@@ -93,24 +136,29 @@ stp enable
 
 ![](pictures/08.jpg)
 
+Конфиги по задаче тут: [SWA](config/L1/SWA.txt), [SWB](config/L1/SWB.txt), [SWC](config/L1/SWC.txt), [SWD](config/L1/SWD.txt)
+
 Ну и чуть-чуть допов: есть информация, что MSTP региона, который должен быть одинаковым на всех участниках в регионе, вычисляется как хэш и передается в открытом виде
 
 ![](pictures/09.jpg)
 
 ___ЛР2___
 
-Задача:
+стр. 29 HCIE-R&S+Lab+Guide+v3.0.pdf
 
-1. Настроить PPPoE клиента и сервера на R1 и R2 соответственно. 
-2. Настроить serial и собрать их в MP на R2 и R3. 
-3. Настроить serial и собрать их в IP-Trunk на R3 и R4. 
-4. Настроить статик так, чтобы появилась связность R1 and R4 по IPv4.
+Дизайн, Адресация - на картинках ниже.
 
 ![](pictures/24.jpg)
 
 ![](pictures/21.jpg)
 
+## ЗАДАНИЕ ##
+1. Настроить PPPoE клиента и сервера на R1 и R2 соответственно. 
+2. Настроить serial и собрать их в MP на R2 и R3. 
+3. Настроить serial и собрать их в IP-Trunk на R3 и R4. 
+4. Настроить статик так, чтобы появилась связность R1 and R4 по IPv4.
 
+## Решение ##
 
 1. Настройка PPPoE
 ___Server___
