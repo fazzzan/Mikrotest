@@ -7,9 +7,7 @@
 Лабораторки ___Лабы LAB GUIDE 3.0___ - нормальные отзывы от преподавателя
 Лабораторки ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
 
-Configuration Examples iStack
-https://support.huawei.com/enterprise/en/doc/EDOC1000047416?section=j00c
-https://support.huawei.com/enterprise/ru/doc/EDOC1000044778/91449095/configuration-examples
+
 
 E-Trunk
 https://support.huawei.com/enterprise/en/doc/EDOC1000178168/83eed721/e-trunk
@@ -27,14 +25,79 @@ OSPF
 IS-IS (из v 1.1)
 
 Лаба 1, 2 - сделать до Чтв.
+# Lan Technologies #
+___HCIE-R&S Theory v3.0.pdf___, стр. 3 - 73
 
-## MSTP (стр 5-27)## 
+___Материал 1-го дня___ 
+- Lan Technologies (5-71 / 01:34:00 - 04:37:00)
+   - MAC address Table (5-18 / 01:34:00 - 01:56:00)
+      - Classification MAC Address Entries (5-9 / 01:34:00 - 01:40:00)
+      - Port Security (10-12 / 01:40:00 - 01:44:00)
+      - MAC address flapping (13-16 / 01:44:00 - 01:56:00)
+      - доп. материал "05 Ethernet Switching Security.pdf"
+   - Gratituous (Грэйтиус ЭйЭрПи) ARP (17-18 / 01:56:00 - 01:60:00)
+   - MSTP (19-27 / 02:00:00 - 02:25:00)
+      - STP/RSTP Review (19-21 / 02:00:00 - 02:05:00)
+      - MSTP Fundamentals (22-27 / 02:05:00 - 02:49:00)
+      - доп. материал "15 MSTP Implementation and Configuration.pdf" (/ 02:05:00 - 02:25:00)
+         - Overview MSTP
+         - MST Region
+         - MSTI
+         - CST
+         - IST
+         - CIST
+         - SST
+         - CIST Root, Regional Root, Master Bridge
+         - MSTP port Roles
+         - MSTP BPDU
+         - MSTP Configuration Commands
+      - доп. материал "https://habr.com/ru/post/419785"
+   - iStack (28-44 / 02:49:00 - 03:28:00; 04:26:00 - 04:30:00)
+      - Typical Campus Networking (28-29  / 02:49:00 - 02:56:00)
+      - iStack fundamentals (30-44 / 02:56:00 - 02:05:00)
+      - доп. материал Configuration Examples iStack "https://support.huawei.com/enterprise/en/doc/EDOC1000047416?section=j00c"
+      - доп. материал Configuration Examples iStack "https://support.huawei.com/enterprise/ru/doc/EDOC1000044778/91449095/configuration-examples"
+   - CSS (45-56 / 04:30:00 - 04:37:00)
+   - Eth-trunk (57-71 / 04:38:00 - 04:37:00) 
+      - Eth-trunk Fundam (57-61 / 04:38:00 - 04:54:00)
+      - Eth-Trunk Implem (62-67 / 04:38:00 - 04:54:00)
+      - E-Trunk (68-71 / 04:54:00 - 04:59:00)
+- LAB GUIDE Л/Р 1 (17-28 / 04:59:00 - 05:05:00) 
+
+- WAN Technologies (74-134 / 05:58:00 - 06:40:45)
+   - WAN IF (77-77 / 06:00:00 - 06:07:00)
+      - Evolution of WAN IF's (78-79 / 06:00:00 - 06:03:00)
+      - Ethernet IF's (80-85 / 06:03:00 - 06:04:00)
+      - POS IF's (86-87 / 06:04:31 - 06:05:00)
+      - Comparision Between Eth and POS IF's (88-90 / 06:05:31 - 06:07:00)
+   - Working Mechanism and configuration of PPP (91-123 / 06:07:16 - 06:29:30)
+      - Basic PPP (91-97 / 06:07:20 - 06:13:00)
+      - LCP (98-106 / 06:13:15 - 06:20:00)
+      - PAP Authent (107-109 / 06:21:00 - 06:22:00)
+      - CHAP Authent (110-114 / 06:22:00 - 06:24:00)
+      - NCP (115-117 / 06:23:45 - 06:26:30)
+      - MP Fundamentals (118-119 / 06:26:30 - 06:28:00)
+      - PPP and MP Configuration (120-123 / 06:28:10 - 06:29:30)
+   - IP-Trunk (124-126 / 06:29:30 - 06:31:21)
+   - Working Mechanism and configuration of PPPoE (127-134 / 06:31:25 - 06:40:45)
+      - Working Mechanism PPPoE (127-131 / 06:31:25 - 06:37:54)
+      - PPPoE Config (132-134 / 06:37:54 - 06:40:45)
+- LAB GUIDE Л/Р 2 (29-37 / 06:40:45 - 07:19:12) 
+
+## MAC address Table (5-18) ##
+видео  
+### Classification MAC Address Entries (5-9) ###
+### Port Security (10-12) ###
+### MAC address flapping (13-16) ###
+
+## MSTP (стр 19-27) ## 
+
 ![](pictures/10.jpg)
 
 https://habr.com/ru/post/419785/
 
 
-## iStack/стекирование (стр 28-56)##
+## iStack/стекирование (стр 28-44)##
 
 ![](pictures/11.jpg)
 Дает нам:
@@ -46,7 +109,9 @@ https://habr.com/ru/post/419785/
 ![](pictures/12.jpg)
 - выбирается мастер, который отвечает за работу коммутаторов в iStack
 
-## Eth-trunk (стр 57-73) ##
+## Eth-trunk  (стр 57-73) ##
+Запись 00:14:00 - xxxx
+
 Прослушали материал, запускаем лабу (Стр. 17-28):
 
 ![](pictures/13.jpg)
