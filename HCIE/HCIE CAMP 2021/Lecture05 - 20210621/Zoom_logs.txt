@@ -1,0 +1,145 @@
+всем привет...тишина??
+Лабы делаем??
+From Михаил Кабанов to Everyone:  10:09 AM
+Да, 9
+From Gennady Danilkin to Everyone:  10:09 AM
+yes
+From Булат Ахметшин to Everyone:  10:09 AM
+да, проверь чат в телеграме)
+From УЦ Микротест Зал 10 to Everyone:  10:10 AM
+Примечание.  - сети, которые по описанию в лабе  назначены  на  vlanif интерфейсы в нашей заготовке назначены на loopback интерфесы
+From Гучик Илья to Everyone:  10:25 AM
+Коллеги, здравствуйте. Поздно подключился. Делаем лабу ?
+From Evgeniy Nikolaev to Everyone:  10:29 AM
+Да, лаба до 12-20 мск
+From УЦ Микротест Зал 10 to Everyone:  10:30 AM
+Лаба 9. Делаем по "обычному" лабгайду. На роутере 6 нет предконфиги - его настраиваем с "нуля". Роутеры запускаем поочередно, иначе может не применяться исходная конфига.
+Делаем До 12-20 мск
+Далее начнём перед обедом теорию (Route Control) и после обеда продолжим (ориентировочно до 15-00)
+Далее доделывание лабы 9 (кто не успеет сделать полностью ) и лаба 10.
+
+
+В шаге на стр.156 в лабгайде в команде опечатка
+[R4]ip community-filter 10 deny 100:200
+
+нужно 
+[R4]ip community-filter 10 permit 100:200
+
+------------------
+Если что - в итоговой конфиге в конце лабы команды представлены правильно.
+From Гучик Илья to Everyone:  10:35 AM
+Ясно, спасибо!
+From Булат Ахметшин to Everyone:  10:37 AM
+можно ссылку на сайт Huawei в верху блокнота продублировать?
+From Ilya Kuzminykh to Everyone:  11:13 AM
+Добрый день. Подскажите, в чем подвох
+From Doctor Strange to Everyone:  11:16 AM
+маска 24 совпадает с классом сети. Поэтому не выводится.
+From Ilya Kuzminykh to Everyone:  11:23 AM
+воу, спасиб
+From Булат Ахметшин to Everyone:  12:27 PM
+почему нумерация acl начинается с 2000?
+куда используются до 2000?
+From BruceLee to Everyone:  12:34 PM
+Q: почему нумерация acl начинается с 2000?
+куда используются до 2000?
+A: 1000 to 1999 interface ACL
+From Мирослав Пузырев to Everyone:  12:39 PM
+если хотим заматчить dedault route 0.0.0.0/0 префикс листом будет достаточно prefix list-а ip prefix-list 0.0.0.0 0 ?
+ip prefix-list FILTER index 10 permit 0.0.0.0 0
+From Михаил Кабанов to Everyone:  12:41 PM
+(интересный момент - так, все сети "прилипнут")
+From BruceLee to Everyone:  12:46 PM
+Q:если хотим заматчить dedault route 0.0.0.0/0 префикс листом будет достаточно prefix list-а ip prefix-list 0.0.0.0 0 ?
+A: ip ip-prefix 10 index 10 permit 0.0.0.0 0 - дефолт 
+ip ip-prefix 10 index 20 permit 0.0.0.0 0 less-equal 32 - все
+From Михаил Кабанов to Everyone:  12:48 PM
+о как! Только что говорилось, что le 32 (у хуавея) - по-умолчанию - т. е. нет такого?
+From УЦ Микротест Зал 10 to Everyone:  01:03 PM
+"о как! Только что говорилось, что le 32 (у хуавея) - по-умолчанию - т. е. нет такого?
+" - я такого не говорил....имелось ввиду что если есть оператор ge  и нет оператора le , то тогда верхняя маска будет 32
+From BruceLee to Everyone:  01:09 PM
+Q: "о как! Только что говорилось, что le 32 (у хуавея) - по-умолчанию - т. е. нет такого?
+" - я такого не говорил....имелось ввиду что если есть оператор ge  и нет оператора le , то тогда верхняя маска будет 32
+A: https://support.huawei.com/hedex/hdx.do?lib=EDOC1100087043AEJ0324D&docid=EDOC1100087043&lang=en&v=10&tocLib=EDOC1100087043AEJ0324D&tocV=10&id=EN-US_CLIREF_0177883086&tocURL=resources%2525252Fdc%2525252Fip_ip-prefix.html&p=t&fe=1&ui=3&keyword=ip%25252Bip-prefix 
+Много разных примеров 
+Case 3:
+
+ip ip-prefix aa index 10 permit 10.1.1.0 24 greater-equal 26
+Configuration result: greater-equal-value is 26, and less-equal-value is 32.
+
+Matching result: The routes with the mask length ranging from 26 to 32 are permitted, and the other routes are denied.
+From Михаил Кабанов to Everyone:  01:47 PM
+ПОНЯЛ, спасибо!
+From Михаил Кабанов to Everyone:  01:56 PM
++
+From Станислав Шраге to Everyone:  01:56 PM
++
+From Иван Орловский to Everyone:  01:56 PM
++
+From Evgenii Golotik to Everyone:  01:56 PM
++
+From Булат Ахметшин to Everyone:  01:56 PM
++
+From Дмитрий Ширков to Everyone:  01:56 PM
++
+From Максим Монасыпов to Everyone:  01:56 PM
++
+From Евгений Петрунькин to Everyone:  01:56 PM
++
+From Александр Калёнов to Everyone:  01:56 PM
++
+From Potemkin Potemkin to Everyone:  01:57 PM
++
+From Афиногенов Павел to Everyone:  02:01 PM
++
+From Сергей Власов to Everyone:  02:03 PM
+Понял, спасибо.
+From Булат Ахметшин to Everyone:  02:05 PM
+там по 10 раз повторяются некоторые вопросы)
+в поросах где нужно выбрать множественные ответы, может быть, что все ответы правильные?
+From Дмитрий Ширков to Everyone:  02:07 PM
+Да
+From Максим Монасыпов to Everyone:  02:44 PM
+tag поддерживается всеми протоколами маршрутизации?
+From Станислав Шраге to Everyone:  02:47 PM
+преференсе это админстративная дистанция ?
+From BruceLee to Everyone:  02:48 PM
+Q:преференсе это админстративная дистанция ?
+A: Да
+From Станислав Шраге to Everyone:  02:49 PM
+спасибо
+From BruceLee to Everyone:  02:51 PM
+Q: tag поддерживается всеми протоколами маршрутизации?
+A: В BGP нет
+OSPF, IS-IS,RIP - есть
+From Me to BruceLee:  (Privately) 02:52 PM
+ local preference рассказывает что какой-то путь во-вне более приоритетный для всех пиров iBGP внутри AS
+From Станислав Шраге to Everyone:  02:53 PM
+У FortiGate в SD-WAN активно используется роут-тэг в связке с BGP.
+From Me to BruceLee:  (Privately) 02:53 PM
+У AD - другая природа.
+From Me to Everyone:  02:56 PM
+
+AD:
+iBGP 	200
+BGP      20
+ local preference рассказывает что какой-то путь во-вне более приоритетный для всех пиров iBGP внутри AS
+
+From Me to Станислав Шраге:  (Privately) 02:57 PM
+Bruce lee гонит похоже чутка...
+From Михаил Кабанов to Everyone:  03:02 PM
+спасибо!
+From BruceLee to Me:  (Privately) 03:06 PM
+О каком preference речь :
+The preference command sets a priority for EBGP routes, IBGP routes, or local BGP routes. BGP routes are configured with different priorities in different address family views.
+The peer preferred-value command sets a preferred value for the routes that a BGP device learns from its peer.
+
+The undo peer preferred-value command deletes the preferred value set for the routes that a BGP device learns from its peer.
+The default local-preference command configures a Local_Pref for BGP routes.
+
+The undo default local-preference command restores the default value.
+
+By default, the Local_Pref of BGP routes is 100.
+From Me to BruceLee:  (Privately) 03:08 PM
+Я к тому что мне показалось что вы ответили что local preference и AD - это одно и то же...
