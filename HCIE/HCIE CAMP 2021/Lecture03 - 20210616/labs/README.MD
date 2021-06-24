@@ -100,7 +100,7 @@ ospfv3 3
 import-route ospfv3 2
 quit
 ```
-Конфиги по задаче тут: [R1](config/L4/R1.txt), [R2](config/L4/R2.txt), [R3](config/L4/R3.txt)
+Конфиги по задаче тут: [R1](config/L5/R1.txt), [R2](config/L5/R2.txt), [R3](config/L5/R3.txt)
 
 
 
@@ -117,8 +117,7 @@ ___ЛР06___
 
 ## ЗАДАНИЕ ##
 1. Вклдчить OSPFv3 1 на R1, R2, R3, R4 and R5. 
-2. Area 0 (R1 и R2), Area 2 (R1 и R3), Area 1 (R1 и R5), а  Area 3 (R2 и R4). После установки OSPFv3 - соседства,  R1, R2, 
-R3, R4 и R5 будут иметь Ipv6-связность. 
+2. Area 0 (R1 и R2), Area 2 (R1 и R3), Area 1 (R1 и R5), а  Area 3 (R2 и R4). После установки OSPFv3 - соседства,  R1, R2, R3, R4 и R5 будут иметь Ipv6-связность. 
 3. Включить IS-ISv6 на R5, R6 и R7. Задать уровень IS-IS R5 и R6 равным Level-1-2, а для R7 - Level-1. После установки соседства IS-IS , R5, R6 и R7 будут иметь Ipv6-связность. 
 4. На R5, сконфигурировать передачу маршрутов [route redistribution] из OSPFv3 в IS-ISv6 и наоборот (IS-ISv6 в  OSPFv3). Настроить фильтрация импортируемых маршрутов на R5 так, чтобы предотвратить доступ из R&D Dept. 2 (слева) в сегменты справа  Marketing Dept. 1 и R&D Dept. 1, and After-Sales Service Dept. 
 5. Отфильтровать маршруты на R3 так чтобы Marketing Dept. 1 не мог попасть в сегмент R&D Dept. 1. 

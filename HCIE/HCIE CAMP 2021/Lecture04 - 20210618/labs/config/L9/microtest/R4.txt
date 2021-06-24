@@ -1,14 +1,9 @@
-<R4>displ curr
 [V200R003C00]
 #
  sysname R4
 #
  snmp-agent local-engineid 800007DB03000000000000
  snmp-agent 
-#
-acl ipv6 number 2000  
- rule 5 deny source 2004::/64 
- rule 10 permit 
 #
  clock timezone China-Standard-Time minus 08:00:00
 #
@@ -30,27 +25,82 @@ aaa
  local-user admin service-type http
 #
 ospfv3 1
- router-id 4.4.4.4
- filter-policy 2000 import
- import-route direct
+ router-id 10.0.4.4
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
  ipv6 enable 
- ipv6 address 2006::1/64 
+ ip address 10.0.46.4 255.255.255.0 
+ ipv6 address 2000::4604/120 
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2024::4/64 
- ospfv3 1 area 0.0.0.3
+ ip address 10.0.24.4 255.255.255.0 
+ ipv6 address 2000::2404/120 
+ ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/2
- ipv6 enable 
- ipv6 address 2003::1/64 
 #
 interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.4.4 255.255.255.255 
+ ipv6 address 2000::4/128 
+ ospfv3 1 area 0.0.0.0
+#
+bgp 100
+ router-id 10.0.4.4
+ peer 10.0.2.2 as-number 100 
+ peer 10.0.2.2 connect-interface LoopBack0
+ peer 10.0.46.6 as-number 200 
+ peer 10.0.46.6 password cipher %$%$L0nR!)g-~1G\6L$;7'XI\A`y%$%$ 
+ peer 2000::2 as-number 100 
+ peer 2000::2 connect-interface LoopBack0
+ peer 2000::4606 as-number 200 
+ peer 2000::4606 password cipher %$%$lY/Y5_o0,W~Kt>26XuU~\Aa4%$%$ 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.4.4 255.255.255.255 
+  peer 10.0.2.2 enable
+  peer 10.0.46.6 enable
+  peer 10.0.46.6 route-policy ADD_COMMUNITY import
+  peer 10.0.46.6 route-policy FILTER export
+ #
+ ipv6-family unicast
+  undo synchronization
+  aggregate 2000:0:0:70:: 62 as-set detail-suppressed attribute-policy aggregati
+on 
+  network 2000::4 128 
+  peer 2000::2 enable
+  peer 2000::4606 enable
+#
+ospf 1 router-id 10.0.4.4 
+ area 0.0.0.0 
+  network 10.0.4.4 0.0.0.0 
+  network 10.0.24.0 0.0.0.255 
+  network 10.0.46.0 0.0.0.255 
+#
+route-policy ADD_COMMUNITY permit node 10 
+ apply community 100:400 
+#
+route-policy FILTER deny node 10 
+ if-match community-filter 10 
+#
+route-policy FILTER permit node 20 
+#
+route-policy aggregation permit node 10 
+ if-match ipv6 address prefix-list aggregation 
+ apply local-preference 200 
+#
+route-policy aggregation permit node 20 
+#
+ip community-filter 10 permit 100:200
+#
+ip ipv6-prefix aggregation index 10 permit 2000:0:0:70:: 62
 #
 user-interface con 0
  authentication-mode password

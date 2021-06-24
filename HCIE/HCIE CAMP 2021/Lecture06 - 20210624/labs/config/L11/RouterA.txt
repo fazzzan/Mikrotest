@@ -1,0 +1,39 @@
+system-view 
+sysname RouterA
+ 
+### Настроим сразу IPv4 и IPv6
+interface GigabitEthernet0/0/2
+ip addr 192.168.3.1 24
+quit
+
+interface GigabitEthernet 0/0/1
+ip addr 192.168.1.1 24
+quit
+
+
+
+
+### включаем OSPF2
+ospf 1
+ area 0
+netw 192.168.1.0 0.0.0.255
+netw 192.168.3.0 0.0.0.255
+quit
+
+### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
+multicast routing-enable 
+interface GigabitEthernet 0/0/1 
+pim sm 
+quit 
+
+interface GigabitEthernet 0/0/2 
+pim sm 
+quit 
+
+<RouterA>display pim neighbor 
+
+
+### Configure a static RP on Router A, Router B, and Router C
+pim 
+static-rp 192.168.1.1 
+quit 

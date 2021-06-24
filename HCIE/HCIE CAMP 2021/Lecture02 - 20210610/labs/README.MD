@@ -350,7 +350,7 @@ quit
 8.Configure on R1, R2, R3 OSPF for links between routers and loopbacks interfaces. Disable loopbacks interfaces from sending and  receiving ospf hello packets.
 
 ```
-AR3 - юанально задаем сети
+AR3 - канально задаем сети
 
 AR1 ### включаем OSPF2, импортируем коннектед и зададим ACL для нужных подсетей
 ospf 1 router-id 1.1.1.1 

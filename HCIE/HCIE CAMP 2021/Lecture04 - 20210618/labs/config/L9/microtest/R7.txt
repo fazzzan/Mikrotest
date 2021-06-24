@@ -1,67 +1,98 @@
+[V200R003C00]
 #
-sysname R7
+ sysname R7
 #
-info-center source DS channel 0 log state off  trap state off
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
 #
-ipv6
+ clock timezone China-Standard-Time minus 08:00:00
 #
-aaa
+portal local-server load portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ipv6 
+#
+ set cpu-usage threshold 80 restore 75
+#
+aaa 
  authentication-scheme default
  authorization-scheme default
  accounting-scheme default
- domain default
- domain default_admin
- local-user admin password cipher I@qZ>s3UmQpe}@HMNPn@U=a#
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
  local-user admin service-type http
 #
-isis 1
- is-level level-1
- network-entity 10.0000.0000.0007.00
- #
- ipv6 enable topology standard
- ipv6 import-route direct level-1
- #
-#
 firewall zone Local
- priority 16
-#
-interface Ethernet0/0/0
-#
-interface Ethernet0/0/1
-#
-interface Serial0/0/0
- link-protocol ppp
-#
-interface Serial0/0/1
- link-protocol ppp
-#
-interface Serial0/0/2
- link-protocol ppp
-#
-interface Serial0/0/3
- link-protocol ppp
+ priority 15
 #
 interface GigabitEthernet0/0/0
- ipv6 enable
- ipv6 address 2004::1/64
+ ipv6 enable 
+ ip address 10.0.67.7 255.255.255.0 
+ ipv6 address 2000::6707/120 
 #
 interface GigabitEthernet0/0/1
- ipv6 enable
- ipv6 address 2005::1/64
+ ipv6 enable 
+ ip address 10.0.78.7 255.255.255.0 
+ ipv6 address 2000::7807/120 
 #
 interface GigabitEthernet0/0/2
- ipv6 enable
- ipv6 address 2067::7/64
- isis ipv6 enable 1
-#
-interface GigabitEthernet0/0/3
-#
-wlan
 #
 interface NULL0
 #
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.7.7 255.255.255.255 
+ ipv6 address 2000::7/128 
+#
+interface LoopBack11
+ ip address 10.1.7.1 255.255.255.0 
+#
+interface LoopBack12
+ ipv6 enable 
+ ipv6 address 2000:0:0:70::1/64 
+#
+interface LoopBack13
+ ipv6 enable 
+ ipv6 address 2000:0:0:71::1/64 
+#
+interface LoopBack14
+ ipv6 enable 
+ ipv6 address 2000:0:0:72::1/64 
+#
+interface LoopBack15
+ ipv6 enable 
+ ipv6 address 2000:0:0:73::1/64 
+#
+bgp 300
+ peer 10.0.67.6 as-number 200 
+ peer 10.0.78.8 as-number 400 
+ peer 2000::6706 as-number 200 
+ peer 2000::7808 as-number 400 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.7.7 255.255.255.255 
+  network 10.1.7.0 255.255.255.0 
+  peer 10.0.67.6 enable
+  peer 10.0.78.8 enable
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::7 128 
+  network 2000:0:0:70:: 64 
+  network 2000:0:0:71:: 64 
+  network 2000:0:0:72:: 64 
+  network 2000:0:0:73:: 64 
+  peer 2000::6706 enable
+  peer 2000::7808 enable
+#
 user-interface con 0
+ authentication-mode password
 user-interface vty 0 4
 user-interface vty 16 20
+#
+wlan ac
 #
 return

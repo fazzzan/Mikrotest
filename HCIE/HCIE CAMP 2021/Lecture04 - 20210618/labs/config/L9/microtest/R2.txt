@@ -1,4 +1,3 @@
-<R2>displ curr
 [V200R003C00]
 #
  sysname R2
@@ -26,24 +25,65 @@ aaa
  local-user admin service-type http
 #
 ospfv3 1
- router-id 2.2.2.2
+ router-id 10.0.2.2
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
  ipv6 enable 
- ipv6 address 2012::2/64 
+ ip address 10.0.12.2 255.255.255.0 
+ ipv6 address 2000::1202/120 
  ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2024::2/64 
- ospfv3 1 area 0.0.0.3
+ ip address 10.0.24.2 255.255.255.0 
+ ipv6 address 2000::2402/120 
+ ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/2
 #
 interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.2.2 255.255.255.255 
+ ipv6 address 2000::2/128 
+ ospfv3 1 area 0.0.0.0
+#
+bgp 100
+ router-id 10.0.2.2
+ peer 10.0.1.1 as-number 100 
+ peer 10.0.1.1 connect-interface LoopBack0
+ peer 10.0.4.4 as-number 100 
+ peer 10.0.4.4 connect-interface LoopBack0
+ peer 2000::1 as-number 100 
+ peer 2000::1 connect-interface LoopBack0
+ peer 2000::4 as-number 100 
+ peer 2000::4 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.2.2 255.255.255.255 
+  peer 10.0.1.1 enable
+  peer 10.0.1.1 advertise-community
+  peer 10.0.4.4 enable
+  peer 10.0.4.4 reflect-client
+  peer 10.0.4.4 advertise-community
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::2 128 
+  peer 2000::1 enable
+  peer 2000::4 enable
+  peer 2000::4 reflect-client
+#
+ospf 1 router-id 10.0.2.2 
+ area 0.0.0.0 
+  network 10.0.2.2 0.0.0.0 
+  network 10.0.12.0 0.0.0.255 
+  network 10.0.24.0 0.0.0.255 
 #
 user-interface con 0
  authentication-mode password

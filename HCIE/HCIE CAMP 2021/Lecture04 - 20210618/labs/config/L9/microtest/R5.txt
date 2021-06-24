@@ -1,14 +1,9 @@
-<R5>displ curr
 [V200R003C00]
 #
  sysname R5
 #
  snmp-agent local-engineid 800007DB03000000000000
  snmp-agent 
-#
-acl ipv6 number 2000  
- rule 5 deny source 2005::/64 
- rule 10 permit 
 #
  clock timezone China-Standard-Time minus 08:00:00
 #
@@ -29,34 +24,73 @@ aaa
  local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
  local-user admin service-type http
 #
-isis 1
- network-entity 10.0000.0000.0005.00
- #
- ipv6 enable topology standard
- ipv6 import-route ospfv3 1 
- #
-#
 ospfv3 1
- router-id 5.5.5.5
- filter-policy 2000 export
- import-route isis 1
+ router-id 10.0.5.5
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
+ ipv6 enable 
+ ip address 10.0.35.5 255.255.255.0 
+ ipv6 address 2000::3505/120 
+ ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2056::5/64 
- isis ipv6 enable 1
+ ip address 10.0.58.5 255.255.255.0 
+ ipv6 address 2000::5805/120 
 #
 interface GigabitEthernet0/0/2
- ipv6 enable 
- ipv6 address 2015::5/64 
- ospfv3 1 area 0.0.0.1
 #
 interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.5.5 255.255.255.255 
+ ipv6 address 2000::5/128 
+ ospfv3 1 area 0.0.0.0
+#
+bgp 100
+ router-id 10.0.5.5
+ peer 10.0.3.3 as-number 100 
+ peer 10.0.3.3 connect-interface LoopBack0
+ peer 10.0.58.8 as-number 400 
+ peer 10.0.58.8 password cipher %$%$80`w%F=BdXk%lj(b<FF*\C69%$%$ 
+ peer 2000::3 as-number 100 
+ peer 2000::3 connect-interface LoopBack0
+ peer 2000::5808 as-number 400 
+ peer 2000::5808 password cipher %$%$Ek3G'+\kYQ74[><uQ6wQ\C7(%$%$ 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.5.5 255.255.255.255 
+  peer 10.0.3.3 enable
+  peer 10.0.58.8 enable
+  peer 10.0.58.8 route-policy ADD_COMMUNITY import
+  peer 10.0.58.8 route-policy FILTER export
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::5 128 
+  peer 2000::3 enable
+  peer 2000::5808 enable
+#
+ospf 1 router-id 10.0.5.5 
+ area 0.0.0.0 
+  network 10.0.5.5 0.0.0.0 
+  network 10.0.35.0 0.0.0.255 
+  network 10.0.58.0 0.0.0.255 
+#
+route-policy ADD_COMMUNITY permit node 10 
+ apply community 100:200 
+#
+route-policy FILTER deny node 10 
+ if-match community-filter 10 
+#
+route-policy FILTER permit node 20 
+#
+ip community-filter 10 permit 100:400
 #
 user-interface con 0
  authentication-mode password

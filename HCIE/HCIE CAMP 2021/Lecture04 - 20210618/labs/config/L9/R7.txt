@@ -3,35 +3,82 @@ sysname R7
 ipv6
  
 ### Настроим сразу IPv4 на outside и IPv6 на Inside
-interface GigabitEthernet0/0/2
-ipv6 enable
-ipv6 address 2067::7 64
-quit
-
 interface GigabitEthernet0/0/0
+ip addr 10.0.67.7 24
 ipv6 enable
-ipv6 address 2004::1 64
+ipv6 address 2000::6707 120
 quit
 
 interface GigabitEthernet0/0/1
+ip addr 10.0.78.7 24
 ipv6 enable
-ipv6 address 2005::1 64
+ipv6 address 2000::7807 120
 quit
 
-### включаем IS-IS 1 на IF
-isis 1
+interface lo0
+ip addr 10.0.7.7 32
 ipv6 enable
-is-level level-1
-network-entity 10.0000.0000.0007.00
+ipv6 address 2000::7 128
 quit
 
-interface GigabitEthernet0/0/2
-isis ipv6 enable
+interface lo11
+ip addr 10.1.7.1 24
 quit
 
-display isis peer
-
-### Import direct routes on
-isis 1
-ipv6 import-route direct level-1
+interface lo12
+ipv6 enable
+ipv6 address 2000:0:0:70::1 64
 quit
+
+interface lo13
+ipv6 enable
+ipv6 address 2000:0:0:71::1 64
+quit
+
+interface lo14
+ipv6 enable
+ipv6 address 2000:0:0:72::1 64
+quit
+
+interface lo15
+ipv6 enable
+ipv6 address 2000:0:0:73::1 64
+quit
+
+### Настраиваем eBGP
+bgp 300
+peer 10.0.67.6 as-number 200
+peer 2000::6706 as-number 200
+peer 10.0.78.8 as-number 400
+peer 2000::7808 as-number 400
+
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.67.6 enable
+ peer 10.0.78.8 enable  
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::6706 enable
+ peer 2000::7808 enable
+quit
+
+### Инжектируем подсети loo0 в BGP
+
+bgp 300
+ ipv4-family unicast
+ network 10.0.7.7 32
+ network 10.1.7.0 24
+ ipv6-family unicast 
+ network 2000::7 128 
+ network 2000:0:0:70:: 64
+ network 2000:0:0:71:: 64
+ network 2000:0:0:72:: 64
+ network 2000:0:0:73:: 64
+
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
+
+
+

@@ -5,10 +5,6 @@
  snmp-agent local-engineid 800007DB03000000000000
  snmp-agent 
 #
-acl ipv6 number 2000  
- rule 5 deny source 2006::/64 
- rule 10 permit 
-#
  clock timezone China-Standard-Time minus 08:00:00
 #
 portal local-server load portalpage.zip
@@ -29,25 +25,65 @@ aaa
  local-user admin service-type http
 #
 ospfv3 1
- router-id 3.3.3.3
- filter-policy 2000 import
- import-route direct
+ router-id 10.0.3.3
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
+ ipv6 enable 
+ ip address 10.0.13.3 255.255.255.0 
+ ipv6 address 2000::1303/120 
+ ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2013::3/64 
- ospfv3 1 area 0.0.0.2
+ ip address 10.0.35.3 255.255.255.0 
+ ipv6 address 2000::3503/120 
+ ospfv3 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/2
- ipv6 enable 
- ipv6 address 2001::1/64 
 #
 interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.3.3 255.255.255.255 
+ ipv6 address 2000::3/128 
+ ospfv3 1 area 0.0.0.0
+#
+bgp 100
+ router-id 10.0.3.3
+ peer 10.0.1.1 as-number 100 
+ peer 10.0.1.1 connect-interface LoopBack0
+ peer 10.0.5.5 as-number 100 
+ peer 10.0.5.5 connect-interface LoopBack0
+ peer 2000::1 as-number 100 
+ peer 2000::1 connect-interface LoopBack0
+ peer 2000::5 as-number 100 
+ peer 2000::5 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.3.3 255.255.255.255 
+  peer 10.0.1.1 enable
+  peer 10.0.1.1 advertise-community
+  peer 10.0.5.5 enable
+  peer 10.0.5.5 reflect-client
+  peer 10.0.5.5 advertise-community
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::3 128 
+  peer 2000::1 enable
+  peer 2000::5 enable
+  peer 2000::5 reflect-client
+#
+ospf 1 router-id 10.0.3.3 
+ area 0.0.0.0 
+  network 10.0.3.3 0.0.0.0 
+  network 10.0.13.0 0.0.0.255 
+  network 10.0.35.0 0.0.0.255 
 #
 user-interface con 0
  authentication-mode password
@@ -57,3 +93,4 @@ user-interface vty 16 20
 wlan ac
 #
 return
+<R3> 

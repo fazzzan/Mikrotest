@@ -1,66 +1,79 @@
-<R6>displ curr
+[V200R003C00]
 #
-sysname R6
+ sysname R6
 #
-info-center source DS channel 0 log state off  trap state off
+ snmp-agent local-engineid 800007DB03000000000000
+ snmp-agent 
 #
-ipv6
+ clock timezone China-Standard-Time minus 08:00:00
 #
-aaa
+portal local-server load portalpage.zip
+#
+ drop illegal-mac alarm
+#
+ipv6 
+#
+ set cpu-usage threshold 80 restore 75
+#
+aaa 
  authentication-scheme default
  authorization-scheme default
  accounting-scheme default
- domain default
- domain default_admin
- local-user admin password cipher Y*\|HLG[Y5pe}@HMNPn@'=f#
+ domain default 
+ domain default_admin 
+ local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
  local-user admin service-type http
 #
-isis 1
- network-entity 10.0000.0000.0006.00
- #
- ipv6 enable topology standard
- ipv6 default-route-advertise always level-1
- #
-#
 firewall zone Local
- priority 16
-#
-interface Ethernet0/0/0
-#
-interface Ethernet0/0/1
-#
-interface Serial0/0/0
- link-protocol ppp
-#
-interface Serial0/0/1
- link-protocol ppp
-#
-interface Serial0/0/2
- link-protocol ppp
-#
-interface Serial0/0/3
- link-protocol ppp
+ priority 15
 #
 interface GigabitEthernet0/0/0
+ ipv6 enable 
+ ip address 10.0.67.6 255.255.255.0 
+ ipv6 address 2000::6706/120 
 #
 interface GigabitEthernet0/0/1
- ipv6 enable
- ipv6 address 2056::6/64
- isis ipv6 enable 1
+ ipv6 enable 
+ ip address 10.0.46.6 255.255.255.0 
+ ipv6 address 2000::4606/120 
 #
 interface GigabitEthernet0/0/2
- ipv6 enable
- ipv6 address 2067::6/64
- isis ipv6 enable 1
-#
-interface GigabitEthernet0/0/3
-#
-wlan
 #
 interface NULL0
 #
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.6.6 255.255.255.255 
+ ipv6 address 2000::6/128 
+#
+interface LoopBack11
+ ip address 10.1.6.1 255.255.255.0 
+#
+bgp 200
+ peer 10.0.46.4 as-number 100 
+ peer 10.0.46.4 password cipher %$%$*c-047rnaO75I-44P[xO\Ba&%$%$ 
+ peer 10.0.67.7 as-number 300 
+ peer 2000::4604 as-number 100 
+ peer 2000::4604 password cipher %$%$k}cI#GM{:!CS[t1d4DL8\Bcz%$%$ 
+ peer 2000::6707 as-number 300 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.6.6 255.255.255.255 
+  peer 10.0.46.4 enable
+  peer 10.0.67.7 enable
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::6 128 
+  peer 2000::4604 enable
+  peer 2000::6707 enable
+#
 user-interface con 0
+ authentication-mode password
 user-interface vty 0 4
 user-interface vty 16 20
+#
+wlan ac
 #
 return

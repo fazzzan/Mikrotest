@@ -2,62 +2,118 @@ system-view
 sysname R5
 ipv6
  
-### Настроим сразу IPv4 на outside и IPv6 на Inside
-interface GigabitEthernet0/0/2
+### Настроим сразу IPv4 и IPv6
+interface GigabitEthernet0/0/0
+ip addr 10.0.35.5 24
 ipv6 enable
-ipv6 address 2015::5 64
+ipv6 address 2000::3505 120
 quit
 
-interface GigabitEthernet0/0/1
+interface GigabitEthernet 0/0/1
+ip addr 10.0.58.5 24
 ipv6 enable
-ipv6 address 2056::5 64
+ipv6 address 2000::5805 120 
+quit
+
+interface lo0
+ip addr 10.0.5.5 32
+ipv6 enable
+ipv6 address 2000::5 128 
+quit
+
+
+### включаем OSPF2
+
+router-id 10.0.5.5
+ospf 1 router-id 10.0.5.5
+ area 0.0.0.0 
+netw 10.0.5.5 0.0.0.0
+netw 10.0.35.0 0.0.0.255
+netw 10.0.58.0 0.0.0.255
 quit
 
 ### OSPFv3 1
 ospfv3 1
-router-id 5.5.5.5
+router-id 10.0.5.5
+quit
+
+### включаем OSPFv3 2 на IF
+interface GigabitEthernet0/0/0
+ospfv3 1 area 0
+quit
+
+interface LoopBack0
+ospfv3 1 area 0
+quit
+
+### Настраиваем iBGP
+bgp 100
+router-id 10.0.5.5
+peer 10.0.3.3 as-number 100
+peer 10.0.3.3 connect-interface LoopBack0
+peer 2000::3 as-number 100
+peer 2000::3 connect-interface LoopBack0
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.3.3 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::3 enable
+quit
+
+### Настраиваем eBGP
+bgp 100
+peer 10.0.58.8 as-number 400
+peer 10.0.58.8 password cipher huawei
+peer 2000::5808 as-number 400
+peer 2000::5808 password cipher huawei
+
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.58.8 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::5808 enable
 quit
 
 
-### включаем OSPFv3 1 на IF
-interface GigabitEthernet0/0/2
-ospfv3 1 area 1
-quit
+### Инжектируем подсети loo0 в BGP
 
-displa	ospfv nei
+bgp 100
+ ipv4-family unicast
+ network 10.0.5.5 32
+ ipv6-family unicast 
+ network 2000::5 128 
 
-### включаем IS-IS 1 на IF
-isis 1
-ipv6 enable
-is-level level-1-2
-network-entity 10.0000.0000.0005.00
-quit
-
-interface GigabitEthernet0/0/1
-isis ipv6 enable
-quit
-
-display isis peer
-
-### Импорт IS-ISv6 маршрутов в OSPFv3 и наоборот
-ospfv3 1
-import-route isis 1
-quit
-
-isis 1
-ipv6 import-route ospfv3 1
-quit
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
 
 
-# Filter the imported routes on R5 to prevent R&D Dept. 2 from accessing the network segments of Marketing Dept., R&D Dept. 1 and After-Sales Service Dept.
+### Импортировать маршрут в BGP и отфильтровать его 
+используя community attributes.  Значение 100:200 
+показывает что маршрут не полетит в AS 200, 
+и community attribute 100:400 показывает что маршрут
+не полетит в AS 400.
 
+route-policy ADD_COMMUNITY permit node 10 
+ apply community 100:200
+ quit 
 
-acl ipv6 2000 
-rule deny source 2005:: 64 
-rule permit 
-quit 
+ip community-filter 10 permit 100:400 
 
-ospfv3 1 
-filter-policy 2000 export 
-quit 
+route-policy FILTER deny node 10 
+ if-match community-filter 10 
+ quit 
+route-policy FILTER permit node 20 
+ quit 
+
+bgp 100 
+ipv4-family unicast
+ peer 10.0.58.8 route-policy ADD_COMMUNITY import
+ peer 10.0.58.8 route-policy FILTER export
+
+display bgp routing-table community
 

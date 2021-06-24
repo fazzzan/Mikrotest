@@ -2,45 +2,139 @@ system-view
 sysname R4
 ipv6
  
-### Настроим сразу IPv4 на outside и IPv6 на Inside
+### Настроим сразу IPv4 и IPv6
 interface GigabitEthernet0/0/1
+ip addr 10.0.24.4 24
 ipv6 enable
-ipv6 address 2024::4 64
+ipv6 address 2000::2404 120
 quit
 
-interface GigabitEthernet0/0/0
+interface GigabitEthernet 0/0/0
+ip addr 10.0.46.4 24
 ipv6 enable
-ipv6 address 2006::1 64
+ipv6 address 2000::4604 120 
 quit
 
-interface GigabitEthernet0/0/2
+interface lo0
+ip addr 10.0.4.4 32
 ipv6 enable
-ipv6 address 2003::1 64
+ipv6 address 2000::4 128 
+quit
+
+
+### включаем OSPF2
+
+router-id 10.0.4.4 
+ospf 1 router-id 10.0.4.4
+ area 0.0.0.0 
+netw 10.0.4.4 0.0.0.0
+netw 10.0.24.0 0.0.0.255
+netw 10.0.46.0 0.0.0.255
 quit
 
 ### OSPFv3 1
 ospfv3 1
-router-id 4.4.4.4
+router-id 10.0.4.4
 quit
 
-
-### включаем OSPFv3 1 на IF
+### включаем OSPFv3 2 на IF
 interface GigabitEthernet0/0/1
-ospfv3 1 area 3
+ospfv3 1 area 0
 quit
 
-### импортируем коннектед маршруты
-ospfv3 1
-import-route direct
+interface LoopBack0
+ospfv3 1 area 0
 quit
 
-# Filter routes on R4 to prevent R&D Dept. 1 and After-sales Service Dept. from accessing the network segment of Marketing Dept. 2. 
+### Настраиваем iBGP
+bgp 100
+router-id 10.0.4.4
+peer 10.0.2.2 as-number 100
+peer 10.0.2.2 connect-interface LoopBack0 
 
-acl ipv6 2000 
-rule deny source 2004:: 64 
-rule permit 
-quit 
+peer 2000::2 as-number 100
+peer 2000::2 connect-interface LoopBack0
 
-ospfv3 1 
-filter-policy 2000 import 
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.2.2 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::2 enable
+quit
+
+
+### Настраиваем eBGP
+bgp 100
+peer 10.0.46.6 as-number 200
+peer 10.0.46.6 password cipher huawei
+peer 2000::4606 as-number 200
+peer 2000::4606 password cipher huawei
+
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.46.6 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::4606 enable
+quit
+
+
+### Инжектируем подсети loo0 в BGP
+
+bgp 100
+ ipv4-family unicast
+ network 10.0.4.4 32
+ ipv6-family unicast 
+ network 2000::4 128 
+
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
+
+
+### Импортировать маршрут в BGP и отфильтровать его 
+используя community attributes.  Значение 100:200 
+показывает что маршрут не полетит в AS 200, 
+и community attribute 100:400 показывает что маршрут
+не полетит в AS 400.
+
+route-policy ADD_COMMUNITY permit node 10 
+ apply community 100:400
+ quit 
+
+ip community-filter 10 permit 100:200 
+
+route-policy FILTER deny node 10 
+ if-match community-filter 10 
+ quit 
+route-policy FILTER permit node 20 
+ quit 
+
+bgp 100 
+ipv4-family unicast
+ peer 10.0.46.6 route-policy ADD_COMMUNITY import
+ peer 10.0.46.6 route-policy FILTER export
+
+display bgp routing-table community
+
+
+
+
+### Разрешить устройствам из AS 100 доступ к 4 
+сегментам сети: 
+2000:0:0:70:: /64, 2000:0:0:71:: /64, 
+2000:0:0:72:: /64, 2000:0:0:73:: /64. 
+
+ip ipv6-prefix aggregation permit 2000:0:0:72:: 62 
+route-policy aggregation permit node 10 
+if-match ipv6 address prefix-list aggregation 
+apply local-preference 200 
 quit 
+route-policy aggregation permit node 20 
+quit 
+bgp 100 
+ipv6-family unicast 
+aggregate 2000:0:0:70:: 62 as-set detail-suppressed attribute-policy aggregation 

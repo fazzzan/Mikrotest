@@ -2,42 +2,106 @@ system-view
 sysname R3
 ipv6
  
-### Настроим сразу IPv4 на outside и IPv6 на Inside
-interface GigabitEthernet0/0/1
+### Настроим сразу IPv4 и IPv6
+interface GigabitEthernet0/0/0
+ip addr 10.0.13.3 24
 ipv6 enable
-ipv6 address 2013::3 64
+ipv6 address 2000::1303 120
 quit
 
-interface GigabitEthernet0/0/2
+interface GigabitEthernet 0/0/1
+ip addr 10.0.35.3 24
 ipv6 enable
-ipv6 address 2001::1 64
+ipv6 address 2000::3503 120 
 quit
 
+interface lo0
+ip addr 10.0.3.3 32
+ipv6 enable
+ipv6 address 2000::3 128 
+quit
+
+
+### включаем OSPF2
+
+router-id 10.0.3.3 
+ospf 1 router-id 10.0.3.3 
+ area 0.0.0.0 
+netw 10.0.3.3 0.0.0.0
+netw 10.0.13.0 0.0.0.255
+netw 10.0.35.0 0.0.0.255
+quit
 
 ### OSPFv3 1
 ospfv3 1
-router-id 3.3.3.3
+router-id 10.0.3.3
 quit
 
 ### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/0
+ospfv3 1 area 0
+quit
+
 interface GigabitEthernet0/0/1
-ospfv3 1 area 2
+ospfv3 1 area 0
 quit
 
-### импортируем коннектед маршруты
-ospfv3 1
-import-route direct
+interface LoopBack0
+ospfv3 1 area 0
 quit
 
 
-# Filter the imported routes on R3 to prevent Marketing Dept. 1 from accessing the network segment of R&D Dept. 1. 
 
+### Настраиваем iBGP
+bgp 100
+router-id 10.0.3.3
+peer 10.0.1.1 as-number 100
+peer 10.0.1.1 connect-interface LoopBack0 
+peer 10.0.5.5 as-number 100
+peer 10.0.5.5 connect-interface LoopBack0
+peer 2000::1 as-number 100
+peer 2000::1 connect-interface LoopBack0
+peer 2000::5 as-number 100
+peer 2000::5 connect-interface LoopBack0
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.1.1 enable 
+ peer 10.0.5.5 enable 
 
-acl ipv6 2000 
-rule deny source 2006:: 64 
-rule permit 
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::1 enable
+ peer 2000::5 enable
+quit
+
+### Настраиваем RR
+bgp 100
+ipv4-family unicast
+ peer 10.0.5.5 reflect-client 
+
+ipv6-family unicast 
+ peer 2000::5 reflect-client 
 quit 
 
-ospfv3 1 
-filter-policy 2000 import 
-quit 
+
+
+### Инжектируем подсети loo0 в BGP
+
+bgp 100
+ ipv4-family unicast
+ network 10.0.3.3 32
+ ipv6-family unicast 
+ network 2000::3 128
+
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
+
+
+### Пробрасываем community
+bgp 100
+ ipv4-family unicast 
+ peer 10.0.1.1 advertise-community
+ peer 10.0.5.5 advertise-community
+ quit
+

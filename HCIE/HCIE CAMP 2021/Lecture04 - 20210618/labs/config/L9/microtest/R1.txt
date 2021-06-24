@@ -1,4 +1,3 @@
-<R1>displa curr
 [V200R003C00]
 #
  sysname R1
@@ -8,11 +7,15 @@
 #
  clock timezone China-Standard-Time minus 08:00:00
 #
-portal local-server load portalpage.zip
+portal local-server load flash:/portalpage.zip
 #
  drop illegal-mac alarm
 #
 ipv6 
+#
+router id 10.0.1.1 
+#
+ wlan ac-global carrier id other ac id 0
 #
  set cpu-usage threshold 80 restore 75
 #
@@ -25,35 +28,101 @@ aaa
  local-user admin password cipher %$%$K8m.Nt84DZ}e#<0`8bmE3Uw}%$%$
  local-user admin service-type http
 #
-isis 1
- network-entity 10.0000.0000.0005.00
- #
- ipv6 enable topology standard
- #
-#
 ospfv3 1
- router-id 1.1.1.1
+ router-id 10.0.1.1
 #
 firewall zone Local
  priority 15
 #
 interface GigabitEthernet0/0/0
  ipv6 enable 
- ipv6 address 2012::1/64 
+ ip address 10.0.12.1 255.255.255.0 
+ ipv6 address 2000::1201/120 
  ospfv3 1 area 0.0.0.0
+ ospf enable 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/1
  ipv6 enable 
- ipv6 address 2013::1/64 
- ospfv3 1 area 0.0.0.2
- isis ipv6 enable 1
+ ip address 10.0.13.1 255.255.255.0 
+ ipv6 address 2000::1301/120 
+ ospfv3 1 area 0.0.0.0
+ ospf enable 1 area 0.0.0.0
 #
 interface GigabitEthernet0/0/2
- ipv6 enable 
- ipv6 address 2015::1/64 
- ospfv3 1 area 0.0.0.1
 #
 interface NULL0
+#
+interface LoopBack0
+ ipv6 enable 
+ ip address 10.0.1.1 255.255.255.255 
+ ipv6 address 2000::1/32 
+ ospfv3 1 area 0.0.0.0
+ ospf enable 1 area 0.0.0.0
+#
+interface LoopBack11
+ ip address 221.12.128.1 255.255.255.0 
+#
+interface LoopBack12
+ ip address 115.192.0.1 255.255.255.0 
+#
+interface LoopBack13
+ ipv6 enable 
+ ip address 10.1.1.1 255.255.255.0 
+ ipv6 address 2000:0:0:11::1/64 
+#
+bgp 100
+ router-id 10.0.1.1
+ peer 10.0.2.2 as-number 100 
+ peer 10.0.2.2 connect-interface LoopBack0
+ peer 10.0.3.3 as-number 100 
+ peer 10.0.3.3 connect-interface LoopBack0
+ peer 2000::2 as-number 100 
+ peer 2000::2 connect-interface LoopBack0
+ peer 2000::3 as-number 100 
+ peer 2000::3 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 10.0.1.1 255.255.255.255 
+  network 10.1.1.0 255.255.255.0 
+  network 115.192.0.0 255.255.255.0 route-policy ADD_COMMUNITY 
+  network 221.12.128.0 route-policy ADD_COMMUNITY 
+  maximum load-balancing ibgp 2
+  load-balancing as-path-ignore
+  peer 10.0.2.2 enable
+  peer 10.0.2.2 reflect-client
+  peer 10.0.2.2 advertise-community
+  peer 10.0.3.3 enable
+  peer 10.0.3.3 reflect-client
+  peer 10.0.3.3 advertise-community
+ #
+ ipv6-family unicast
+  undo synchronization
+  network 2000::1 128 
+  network 2000:0:0:11:: 64 
+  peer 2000::2 enable
+  peer 2000::2 reflect-client
+  peer 2000::3 enable
+  peer 2000::3 reflect-client
+#
+ospf 1 router-id 10.1.1.1 
+ area 0.0.0.0 
+  network 10.0.1.1 0.0.0.0 
+  network 10.0.12.0 0.0.0.255 
+  network 10.0.13.0 0.0.0.255 
+#
+route-policy ADD_COMMUNITY permit node 10 
+ if-match ip-prefix NOT_TO_200 
+ apply community 100:200 additive 
+#
+route-policy ADD_COMMUNITY permit node 20 
+ if-match ip-prefix NOT_TO_400 
+ apply community 100:400 
+#
+route-policy ADD_COMMUNITY permit node 30 
+#
+ip ip-prefix NOT_TO_200 index 10 permit 115.192.0.0 24
+ip ip-prefix NOT_TO_400 index 10 permit 221.12.128.0 24
 #
 user-interface con 0
  authentication-mode password

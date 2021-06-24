@@ -2,35 +2,59 @@ system-view
 sysname R6
 ipv6
  
-### Настроим сразу IPv4 на outside и IPv6 на Inside
-interface GigabitEthernet0/0/1
+### Настроим сразу IPv4 и IPv6
+interface GigabitEthernet0/0/0
+ip addr 10.0.67.6 24
 ipv6 enable
-ipv6 address 2056::6 64
+ipv6 address 2000::6706 120
 quit
 
-interface GigabitEthernet0/0/2
+interface GigabitEthernet 0/0/1
+ip addr 10.0.46.6 24
 ipv6 enable
-ipv6 address 2067::6 64
+ipv6 address 2000::4606 120 
 quit
 
-### включаем IS-IS 1 на IF
-isis 1
+interface lo0
+ip addr 10.0.6.6 32
 ipv6 enable
-is-level level-1-2
-network-entity 10.0000.0000.0006.00
+ipv6 address 2000::6 128 
 quit
 
-interface GigabitEthernet0/0/1
-isis ipv6 enable
-quit
-interface GigabitEthernet0/0/2
-isis ipv6 enable
+interface lo11
+ip addr 10.1.6.1 24
 quit
 
-display isis peer
 
-### Объявим дефолтный маршрут чтобы R7 мог выйти вовне
+### Настраиваем eBGP
+bgp 200
+peer 10.0.46.4 as-number 100
+peer 10.0.46.4 password cipher huawei
+peer 2000::4604 as-number 100
+peer 2000::4604 password cipher huawei
+peer 10.0.67.7 as-number 300
+peer 2000::6707 as-number 300
 
-isis 1
-ipv6 default-route-advertise level-1 
-quit 
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.46.4 enable
+ peer 10.0.67.7 enable  
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::4604 enable
+ peer 2000::6707 enable
+quit
+
+
+### Инжектируем подсети loo0 в BGP
+
+bgp 200
+ ipv4-family unicast
+ network 10.0.6.6 32
+ ipv6-family unicast 
+ network 2000::6 128 
+
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
