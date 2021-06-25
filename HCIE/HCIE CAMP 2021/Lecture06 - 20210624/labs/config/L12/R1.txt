@@ -1,0 +1,239 @@
+system-view 
+sysname R1
+ipv6
+ 
+### Настроим сразу IPv4 и IPv6
+interface GigabitEthernet0/0/1
+ip addr 192.168.40.2 24
+quit
+
+interface GigabitEthernet 0/0/2
+ip addr 10.110.1.1 24
+quit
+
+interface lo0
+ip addr 1.1.1.1 32
+quit
+
+### включаем OSPF2
+ospf 1 router-id 1.1.1.1
+ area 0.0.0.0 
+netw 1.1.1.1 0.0.0.0
+netw 10.110.1.1 0.0.0.0
+netw 192.168.40.2 0.0.0.0
+quit
+
+
+
+
+
+
+
+
+
+
+
+### OSPFv3 1
+ospfv3 1
+router-id 10.0.1.1
+quit
+
+### включаем OSPFv3 1 на IF
+interface GigabitEthernet0/0/0
+ospfv3 1 area 0
+quit
+
+interface GigabitEthernet0/0/1
+ospfv3 1 area 0
+quit
+
+interface LoopBack0
+ospfv3 1 area 0
+quit
+
+### Настраиваем iBGP
+bgp 100
+router-id 10.0.1.1
+peer 10.0.2.2 as-number 100
+peer 10.0.2.2 connect-interface LoopBack0 
+peer 10.0.3.3 as-number 100
+peer 10.0.3.3 connect-interface LoopBack0
+peer 2000::2 as-number 100
+peer 2000::2 connect-interface LoopBack0
+peer 2000::3 as-number 100
+peer 2000::3 connect-interface LoopBack0
+
+
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.2.2 enable 
+ peer 10.0.3.3 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::2 enable
+ peer 2000::3 enable
+quit
+
+### Настраиваем RR
+bgp 100
+ipv4-family unicast
+ peer 10.0.2.2 reflect-client 
+ peer 10.0.3.3 reflect-client 
+
+ipv6-family unicast 
+ peer 2000::2 reflect-client 
+ peer 2000::3 reflect-client 
+quit 
+
+
+display bgp peer 10.0.2.2 verbose | in reflec
+display bgp peer 10.0.3.3 verbose | in reflec
+display bgp peer 10.0.4.4 verbose | in reflec
+display bgp peer 10.0.5.5 verbose | in reflec
+
+
+### Инжектируем подсети loo0 в BGP
+
+bgp 100
+ ipv4-family unicast
+ network 10.0.1.1 32
+ network 10.1.1.0 24
+ ipv6-family unicast 
+ network 2000:0:0:11::1 64
+
+display bgp routing-table
+displ ip routing-table protocol bgp
+displ ipv6 routing-table protocol bgp
+
+
+### Импортировать маршрут в BGP и отфильтровать его 
+используя community attributes.  Значение 100:200 
+показывает что маршрут не полетит в AS 200, 
+и community attribute 100:400 показывает что маршрут
+не полетит в AS 400.
+ip ip-prefix NOT_TO_200 permit 115.192.0.0 24 
+ip ip-prefix NOT_TO_400 permit 221.12.128.0 24 
+
+route-policy ADD_COMMUNITY permit node 10 
+ if-match ip-prefix NOT_TO_200 
+ apply community 100:200 additive 
+ quit 
+route-policy ADD_COMMUNITY permit node 20 
+ if-match ip-prefix NOT_TO_400 
+ apply community 100:400 
+ quit 
+route-policy ADD_COMMUNITY permit node 30 
+ quit 
+ 
+bgp 100 
+ipv4-family unicast
+ peer 10.0.2.2 advertise-community 
+ peer 10.0.3.3 advertise-community 
+ network 115.192.0.0 24 route-policy ADD_COMMUNITY 
+ network 221.12.128.0 24 route-policy ADD_COMMUNITY 
+
+ipv6-family unicast 
+network 2000:0:0:11::1 64 
+
+display bgp routing-table community
+
+
+
+
+
+
+
+### Настраиваем eBGP
+ip route-static 10.0.4.4 255.255.255.255 10.0.14.4
+ipv6 route-static 2000::4 128 2000::1404 
+bgp 100
+peer 10.0.4.4 as-number 200
+peer 10.0.4.4 ebgp-max-hop 2
+peer 10.0.4.4 connect-int loo 0
+peer 10.0.16.6 as-number 400
+peer 2000::4 as-number 200
+peer 2000::4 ebgp-max-hop 2
+peer 2000::4 connect-int loo 0
+peer 2000::1606 as-number 400
+
+ ipv4-family unicast 
+ undo synchronization 
+ peer 10.0.4.4 enable 
+ peer 10.0.16.6 enable 
+
+ ipv6-family unicast
+ undo synchronization
+ peer 2000::4 enable
+ peer 2000::1606 enable
+quit
+
+
+
+
+
+### Фильтрация маршрутов в AS 300 (пир 10.0.4.4) поступивших от AS400 и содержащих в AS-PATH значение 400
+
+ip as-path-filter from_as_400 deny _400_
+ip as-path-filter from_as_400 permit .* 
+ip as-path-filter from_as_200 deny _200_
+ip as-path-filter from_as_200 permit .*
+bgp 100 
+peer 10.0.4.4 as-path-filter from_as_400 export 
+peer 10.0.16.6 as-path-filter from_as_200 export 
+
+
+### Создаем 2 route-policy для доступа из AS 100 к AS300 2000:0:0:51::/64 2000:0:0:52::/64 через AS 200 и AS400 соответственно:
+- сначала выделяем интересующий префикс
+
+ip ipv6-prefix R4_import permit 2000:0:0:51:: 64 
+ip ipv6-prefix R6_import permit 2000:0:0:52:: 64 
+
+- создаем route-policy R4_import из двух условий, задающий local-pref = 150 при трафике на ipv6 из prefix-list
+
+route-policy R4_import permit node 10 
+if-match ipv6 address prefix-list R4_import 
+apply local-preference 150
+quit 
+route-policy R4_import permit node 20
+quit 
+
+route-policy R6_import permit node 10 
+if-match ipv6 address prefix-list R6_import 
+apply local-preference 150
+quit 
+route-policy R6_import permit node 20
+quit 
+
+- вешаем на BGP 100 добиваясь того что маршрут поступивший с пира 2000::4 поменяет свой local preference на 150
+
+bgp 100 
+ipv6-family unicast 
+peer 2000::4 route-policy R4_import import 
+peer 2000::1606 route-policy R6_import import 
+
+
+### Публикация подсетей AS100 с заданием R1 как next-hop-local 
+bgp 100
+ipv4-family unicast 
+network 10.0.1.1 255.255.255.255 
+network 10.0.2.2 255.255.255.255 
+network 10.0.3.3 255.255.255.255 
+
+peer 10.0.2.2 next-hop-local 
+peer 10.0.3.3 next-hop-local 
+
+ipv6-family unicast 
+network 2000::1 128 
+network 2000::2 128 
+network 2000::3 128 
+
+peer 2000::2 next-hop-local 
+peer 2000::3 next-hop-local 
+
+
+
+bgp 100 
+maximum load-balancing ibgp 2 
+load-balancing as-path-ignore 
+quit 
