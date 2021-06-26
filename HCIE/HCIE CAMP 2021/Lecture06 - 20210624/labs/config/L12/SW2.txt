@@ -1,46 +1,62 @@
 system-view 
-sysname RouterB
-ipv6
- 
-### Настроим сразу IPv4 и IPv6
-interface GigabitEthernet0/0/1
-ip addr 192.168.2.1 24
-quit
+sysname SW2
 
-interface GigabitEthernet 0/0/2
-ip addr 192.168.3.2 24
-quit
+vlan batch 10 100
 
-interface GigabitEthernet 0/0/2
-ip addr 10.110.5.1 24
-quit
+int vlan 10 
+ip address ip address 192.168.10.2 24 
+int vlan 100
+ip address 10.110.10.1 24 
 
-### включаем OSPF2
-ospf 1
- area 0
-netw 192.168.3.0 0.0.0.255
-netw 192.168.2.0 0.0.0.255
-netw 10.110.5.0 0.0.0.255
-quit
+interface LoopBack 0 
+ip address 20.20.20.20 32 
+
+interface GigabitEthernet0/0/1 
+ port link-type access 
+ port default vlan 10 
+
+interface GigabitEthernet0/0/23
+ port link-type access 
+ port default vlan 100
+
+ospf 1 router-id 20.20.20.20 
+area 0 
+network 20.20.20.20 0.0.0.0 
+network 192.168.10.2 0.0.0.0 
+network 10.110.10.1 0.0.0.0 
+quit 
+
+#######display ospf peer brief 
 
 ### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
 multicast routing-enable 
-interface GigabitEthernet 0/0/1 
+int vlan 10 
 pim sm 
+int vlan 100 
+pim sm 
+quit
+interface LoopBack 0 
+pim sm 
+quit
+
+int vlan 100 
+igmp enable 
+igmp version 3
+quit
+
+igmp 
+version 3 
 quit 
 
-interface GigabitEthernet 0/0/2 
-pim sm 
+
+### Step 3 (Optional) Configure an SSM group address range. 
+
+acl 2000 
+rule permit source 232.1.1.0 0.0.0.255 
 quit 
-
-interface GigabitEthernet 0/0/3
-pim sm 
-igmp enable
-quit 
-
-<RouterA>display pim neighbor 
-
-### Configure a static RP on Router A, Router B, and Router C
 pim 
-static-rp 192.168.1.1 
+ssm-policy 2000 
 quit 
+
+проверка
+display igmp group 

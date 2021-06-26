@@ -1,0 +1,65 @@
+sysname R2
+#
+info-center source DS channel 0 log state off  trap state off
+#
+multicast routing-enable
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher 1_{r1B.so#3@9_G-B0Y2|pN#
+ local-user admin service-type http
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/1
+ ip address 192.168.50.2 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/2
+ ip address 10.110.2.1 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface LoopBack0
+ ip address 2.2.2.2 255.255.255.255
+ pim sm
+#
+ospf 1 router-id 2.2.2.2
+ area 0.0.0.0
+  network 2.2.2.2 0.0.0.0
+  network 10.110.2.1 0.0.0.0
+  network 192.168.50.2 0.0.0.0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

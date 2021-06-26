@@ -89,40 +89,7 @@ PIM-SM функции можно будет только после PIM-SM ак�
 
 ## Решение ##
 
-Настройка IF, OSPF - все просто
 
-Вторая часть
-
-Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
-```
-multicast routing-enable 
-interface GigabitEthernet 0/0/1 
-pim sm 
-quit 
-
-interface GigabitEthernet 0/0/2 
-pim sm 
-quit 
-
-interface GigabitEthernet 0/0/3
-pim sm 
-igmp enable
-quit 
-
-display pim neighbor 
-```
-
-
-Configure a static RP on Router A, Router B, and Router C
-
-```
-pim 
-static-rp 192.168.1.1 
-quit 
-```
-
-Вывод об отказоустойчивости. после отключения IF 0/0/2 на RB
-![](pictures/06.jpg)
 
 
 Конфиги по задаче тут: 

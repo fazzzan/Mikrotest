@@ -4,3 +4,69 @@ sysname SW1
 vlan batch 10 20 40 50 
 
 int vlan 10 
+ip address 192.168.10.1 24 
+int vlan 20
+ip address 192.168.20.1 24 
+int vlan 40 
+ip address 192.168.40.1 24 
+int vlan 50 
+ip address 192.168.50.1 24 
+
+interface LoopBack 0 
+ip address 10.10.10.10 32 
+
+interface GigabitEthernet0/0/1 
+ port link-type access 
+ port default vlan 10 
+
+interface GigabitEthernet0/0/2 
+ port link-type access 
+ port default vlan 20
+
+interface GigabitEthernet0/0/4
+ port link-type access 
+ port default vlan 40
+
+interface GigabitEthernet0/0/5
+ port link-type access 
+ port default vlan 50
+
+
+ospf 1 router-id 10.10.10.10 
+area 0 
+network 10.10.10.10 0.0.0.0 
+network 192.168.10.1 0.0.0.0 
+network 192.168.20.1 0.0.0.0 
+network 192.168.40.1 0.0.0.0 
+network 192.168.50.1 0.0.0.0 
+quit 
+
+
+#######display ospf peer brief 
+
+### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
+multicast routing-enable 
+int vlan 10 
+pim sm 
+int vlan 20 
+pim sm 
+int vlan 40 
+pim sm 
+int vlan 50 
+pim sm 
+quit
+interface LoopBack 0 
+pim sm 
+quit
+
+### Step 3 (Optional) Configure an SSM group address range. 
+
+acl 2000 
+rule permit source 232.1.1.0 0.0.0.255 
+quit 
+pim 
+ssm-policy 2000 
+quit 
+
+проверка
+display igmp group 

@@ -1,0 +1,149 @@
+sysname R1
+#
+info-center source DS channel 0 log state off  trap state off
+#
+multicast routing-enable
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher {)|$Y^bRuY;BH^68NhwO!pF#
+ local-user admin service-type http
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/1
+ ip address 192.168.40.2 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/2
+ ip address 10.110.1.1 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface LoopBack0
+ ip address 1.1.1.1 255.255.255.255
+ pim sm
+#
+ospf 1 router-id 1.1.1.1
+ area 0.0.0.0
+  network 1.1.1.1 0.0.0.0
+  network 10.110.1.1 0.0.0.0
+  network 192.168.40.2 0.0.0.0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return
+<R1>
+<R1>
+<R1>
+<R1>save
+The current configuration will be written to the device.
+Are you sure to continue?[Y/N]y
+Now saving the current configuration to the slot 17.
+Jun 25 2021 23:54:24-08:00 R1 %%01CFM/4/SAVE(l)[0]:The user chose Y when decidin
+g whether to save the configuration to the device.
+Save the configuration successfully.
+<R1>
+<R1>
+<R1>
+<R1>
+<R1>
+<R1>
+<R1>
+<R1>disp curr
+#
+sysname R1
+#
+info-center source DS channel 0 log state off  trap state off
+#
+multicast routing-enable
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher {)|$Y^bRuY;BH^68NhwO!pF#
+ local-user admin service-type http
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+#
+interface GigabitEthernet0/0/1
+ ip address 192.168.40.2 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/2
+ ip address 10.110.1.1 255.255.255.0
+ pim sm
+#
+interface GigabitEthernet0/0/3
+#
+wlan
+#
+interface NULL0
+#
+interface LoopBack0
+ ip address 1.1.1.1 255.255.255.255
+ pim sm
+#
+ospf 1 router-id 1.1.1.1
+ area 0.0.0.0
+  network 1.1.1.1 0.0.0.0
+  network 10.110.1.1 0.0.0.0
+  network 192.168.40.2 0.0.0.0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return
