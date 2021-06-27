@@ -1,0 +1,73 @@
+system-view 
+sysname R1
+ipv6
+
+ 
+### Настроим сразу IPv6
+interface GigabitEthernet0/0/0
+ipv6 enable
+ipv6 address 2005::2 64
+quit
+
+interface GigabitEthernet0/0/1
+ipv6 enable
+ipv6 address 2011::2 64
+quit
+
+interface GigabitEthernet 0/0/2
+ipv6 enable
+ipv6 address 2014::2 64
+quit
+
+interface GigabitEthernet 0/0/3
+ipv6 enable
+ipv6 address 2023::2 64
+quit
+
+### включаем ISIS100
+isis 100 
+ipv6 enable
+ipv6 enable topology ipv6
+ is-level level-2
+ network-entity 10.0000.0000.0005.00 
+quit
+
+interface GigabitEthernet0/0/0 
+ isis ipv6 enable 100
+interface GigabitEthernet0/0/1 
+ isis ipv6 enable 100
+interface GigabitEthernet0/0/2
+ isis ipv6 enable 100
+interface GigabitEthernet0/0/3
+ isis ipv6 enable 100
+
+display isis peer 
+
+### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
+
+multicast ipv6 routing-enable 
+interface GigabitEthernet 0/0/0
+pim ipv6 sm
+quit
+interface GigabitEthernet 0/0/1 
+pim ipv6 sm
+quit
+interface GigabitEthernet 0/0/2
+pim ipv6 sm
+quit
+interface GigabitEthernet 0/0/3
+pim ipv6 sm
+quit
+
+### Настройка RP
+
+acl ipv6 2001 
+rule permit source ff1e:: 112 
+quit 
+
+pim-ipv6 
+c-rp 2005::2 group-policy 2001 
+c-bsr 2005::2 
+quit 
+
+display igmp group 

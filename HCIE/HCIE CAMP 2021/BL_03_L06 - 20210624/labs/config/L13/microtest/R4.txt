@@ -1,0 +1,72 @@
+sysname R4
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+multicast routing-enable
+multicast ipv6 routing-enable
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher )Ij^*[0'!+@X,k6.E\Z,{J;#
+ local-user admin service-type http
+#
+isis 100
+ network-entity 10.0000.0000.0004.00
+ #
+ ipv6 enable topology ipv6
+ #
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable
+ ipv6 address 2005::1/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ipv6 address 3003::1/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+interface GigabitEthernet0/0/2
+#
+interface GigabitEthernet0/0/3
+ ipv6 enable
+ ipv6 address 2013::2/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+wlan
+#
+interface NULL0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return

@@ -1,0 +1,76 @@
+sysname R5
+#
+info-center source DS channel 0 log state off  trap state off
+#
+ipv6
+#
+multicast ipv6 routing-enable
+#
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher II.c=<Y>hLajUn1vMEIB3J7#
+ local-user admin service-type http
+#
+isis 100
+ is-level level-2
+ network-entity 10.0000.0000.0005.00
+ #
+ ipv6 enable topology ipv6
+ #
+#
+firewall zone Local
+ priority 16
+#
+interface Ethernet0/0/0
+#
+interface Ethernet0/0/1
+#
+interface Serial0/0/0
+ link-protocol ppp
+#
+interface Serial0/0/1
+ link-protocol ppp
+#
+interface Serial0/0/2
+ link-protocol ppp
+#
+interface Serial0/0/3
+ link-protocol ppp
+#
+interface GigabitEthernet0/0/0
+ ipv6 enable
+ ipv6 address 2005::2/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+interface GigabitEthernet0/0/1
+ ipv6 enable
+ ipv6 address 2011::2/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+interface GigabitEthernet0/0/2
+ ipv6 enable
+ ipv6 address 2014::2/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+interface GigabitEthernet0/0/3
+ ipv6 enable
+ ipv6 address 2023::2/64
+ isis ipv6 enable 100
+ pim ipv6 sm
+#
+wlan
+#
+interface NULL0
+#
+user-interface con 0
+user-interface vty 0 4
+user-interface vty 16 20
+#
+return
