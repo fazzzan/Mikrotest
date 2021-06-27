@@ -3,30 +3,32 @@
 Программа первого вебинарного дня. Теоретический блок и 1 лабораторная работа.
 
 Владислав Цуцков
-Версия учебника ___HCIE-R&S Theory v3.0.pdf___ - 
-Лабораторки ___Лабы LAB GUIDE 3.0___ - нормальные отзывы от преподавателя
-Лабораторки ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
+
+Для тех, кто хочет запустить eNSP самостоятельно:
+- http://www.omavel.in/all/ensp-20v100r003c00/
+
+Версии учебника: 
+- ___00_HCIE3.0-R&S+Theory+v3.0.pdf___ - 
+- ___00_HCIE3.0-R&S+Theory+v3.0_RUS.pdf___
+
+Лабораторки 
+- ___00_HCIE3.0-R&S+Lab+Guide+v3.0___ - положительные отзывы от преподавателя
+- ___00_HCIE3.0-Routing & Switching Lab Guide V3.0_RUS___ - на русском, искажен шрифт
+- ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised)___ - Для отдельных лаб, переработанный материал
+- ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
+
+Доп. материалы E-Trunk
+- https://support.huawei.com/enterprise/en/doc/EDOC1000178168/83eed721/e-trunk
+- https://support.huawei.com/enterprise/en/doc/EDOC1000178310/cff339b5/example-for-configuring-connecting-an-e-trunk-to-a-vpls-network
+- https://forum.huawei.com/enterprise/ru/hcie-r-s-%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B/thread/689393-100567
 
 
-
-E-Trunk
-https://support.huawei.com/enterprise/en/doc/EDOC1000178168/83eed721/e-trunk
-https://support.huawei.com/enterprise/en/doc/EDOC1000178310/cff339b5/example-for-configuring-connecting-an-e-trunk-to-a-vpls-network
-
-
-https://forum.huawei.com/enterprise/ru/hcie-r-s-%D1%83%D1%87%D0%B5%D0%B1%D0%BD%D1%8B%D0%B5-%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D1%8B/thread/689393-100567
-
-
-Ключевые темы
-BGP
-MPLS VPN
-Route Control
-OSPF
-IS-IS (из v 1.1)
-
-Лаба 1, 2 - сделать до Чтв.
-# Lan Technologies #
-___HCIE-R&S Theory v3.0.pdf___, стр. 3 - 73
+Ключевые темы экзамена:
+- BGP
+- MPLS VPN
+- Route Control
+- OSPF
+- IS-IS (из v 1.1)
 
 ___Материал 1-го дня___ 
 - Lan Technologies (5-71 / 01:34:00 - 04:37:00)
@@ -34,12 +36,12 @@ ___Материал 1-го дня___
       - Classification MAC Address Entries (5-9 / 01:34:00 - 01:40:00)
       - Port Security (10-12 / 01:40:00 - 01:44:00)
       - MAC address flapping (13-16 / 01:44:00 - 01:56:00)
-      - доп. материал "05 Ethernet Switching Security.pdf"
+      - доп. материал "01_L01+05 Ethernet Switching Security.pdf.pdf"
    - Gratituous (Грэйтиус ЭйЭрПи) ARP (17-18 / 01:56:00 - 01:60:00)
    - MSTP (19-27 / 02:00:00 - 02:25:00)
       - STP/RSTP Review (19-21 / 02:00:00 - 02:05:00)
       - MSTP Fundamentals (22-27 / 02:05:00 - 02:49:00)
-      - доп. материал "15 MSTP Implementation and Configuration.pdf" (/ 02:05:00 - 02:25:00)
+      - доп. материал "01_L01+15 MSTP Implementation and Configuration.pdf" (/ 02:05:00 - 02:25:00)
          - Overview MSTP
          - MST Region
          - MSTI
@@ -84,8 +86,10 @@ ___Материал 1-го дня___
       - PPPoE Config (132-134 / 06:37:54 - 06:40:45)
 - LAB GUIDE Л/Р 2 (29-37 / 06:40:45 - 07:19:12) 
 
+Лабы 1, 2 - сделать до Чтв.
+
+Начал прорабатыватьлекцию, но не успеваю
 ## MAC address Table (5-18) ##
-видео  
 ### Classification MAC Address Entries (5-9) ###
 ### Port Security (10-12) ###
 ### MAC address flapping (13-16) ###
@@ -149,9 +153,7 @@ PPP превращает PPP-кадры в ETHERNET-кадры. Для подк�
 
 
 
-http://www.omavel.in/all/ensp-20v100r003c00/
 
-Окончание - страница 136
 
 
 Следующая лекция: IPv6, OSPFv3

@@ -2,14 +2,23 @@
 
 
 Владислав Цуцков
-Версия учебника ___HCIE-R&S Theory v3.0.pdf___ - 
-Лабораторки ___Лабы LAB GUIDE 3.0___ - нормальные отзывы от преподавателя
-Лабораторки ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
+Версии учебника: 
+- ___00_HCIE3.0-R&S+Theory+v3.0.pdf___ - 
+- ___00_HCIE3.0-R&S+Theory+v3.0_RUS.pdf___
+
+Лабораторки 
+- ___00_HCIE3.0-R&S+Lab+Guide+v3.0___ - положительные отзывы от преподавателя
+- ___00_HCIE3.0-Routing & Switching Lab Guide V3.0_RUS___ - на русском, искажен шрифт
+- ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised)___ - Для отдельных лаб, переработанный материал
+- ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
 
 Дп. материалы:
-22 IPv6 Address Configuration.pdf
-20 Introduction to IPv6.pdf
-21 ICMPv6 and NDP.pdf
+- 01_L02+04_IPv6_Fundamentals_A_Straightforward_Approach_to_Understanding_IPv6.pdf
+- 01_L02+22_IPv6 Address Configuration.pdf
+- 01_L02+20_Introduction to IPv6
+- 01_L02+21_ICMPv6 and NDP.pdf
+- 02_L03++Видео+урок+_Основы+протокола+IS-IS.mp4
+
 
 ___Материал 3-го дня___ 
 - OSPF (219-294 / 04:60:00 - 00:29:00)
@@ -24,7 +33,7 @@ ___Материал 3-го дня___
 
 - IS-IS (295-351 / 00:29:00 - 02:23:51)
   - Advanced IS-IS features (298-330 / 00:29:50 - 02:02:00)
-     - доп. материал HCIE-R&S+Theory+v1.1.pdf (60-123 / упомянули вскользь 00:29:57 - 00:31:00)
+     - доп. материал 00_HCIE1.1-R&S+Theory+v1.1.pdf (60-123 / упомянули вскользь 00:29:57 - 00:31:00)
      - IS-IS fast convergence  (299-305 / 00:32:00 - 01:06:26)
         - доп. материал на сайте HUAWEI (timer lsp-generation) 00:53:43 - 00:56:15
         - доп. материал на сайте HUAWEI (timer lsp-flooding) 00:58:49 - 00:59:00
@@ -32,10 +41,10 @@ ___Материал 3-го дня___
      - IS-IS Administrative tag (306-309 / 01:06:30 - 01:10:00)
      - IS-IS LSP fragmentation (310-313 / 01:26:45 - 01:37:39)
         - доп. материал на сайте HUAWEI (IS-IS administrative tag) 01:26:57 - 01:27:20
-        - доп. материал "01 Advanced IGP Features.pdf" (47 - 67 стр 62/ 01:28:00 - 01:29:00)
+        - доп. материал "01_L02+01_Advanced IGP Features_OSPF_ISIS.pdf" (47 - 67 стр 62/ 01:28:00 - 01:29:00)
      - IS-IS route filtering (314-326 / 01:37:00 - 01:52:00)     
      - IS-IS route leaking (327-330 / 01:52:41 - 02:02:00)     
-        - доп. материал "01 Advanced IGP Features.pdf" (47 - 67 стр 58/ 02:00:00 - 02:02:00)
+        - доп. материал "01_L02+01_Advanced IGP Features_OSPF_ISIS.pdf" (47 - 67 стр 58/ 02:00:00 - 02:02:00)
   - Basic principles and Config of Ipv6 IS-IS (331-343 / 02:03:45 - 02:15:15)
      - IS-IS Proto extension (331-336 / 02:03:45 - 02:10:00)
      - IS-IS ST and MT (337-341 / 02:10:00 - 02:14:15)
@@ -43,11 +52,11 @@ ___Материал 3-го дня___
         - Multi topology (включение ```ipv6 en topo ipv6```)
      - Ipv6 IS-IS Configuration  (342-343 / 02:14:45 - 02:15:15)
   - Application Cases of Dual Stack IS-IS (344-351 / 02:15:15 - 02:23:14)
-     - доп. материал "HCIE-R&S+Theory+v1.1.pdf" (22 02:18:41)
+     - доп. материал "00_HCIE1.1-R&S+Theory+v1.1.pdf" (22 02:18:41)
 - LAB GUIDE Л/Р 06 (OSPFv3+IS-IS) (74-101 / 02:23:14 - 02:23:34) 
 - LAB GUIDE Л/Р 07 (IS-IS) (102-119 / 02:23:34 - 02:23:51) 
 
-Доп Материал "1+Видео+урок+_Основы+протокола+IS-IS_fc770499-b7cd-4f6f-a3fe-3bfb40a6cc3b"
+Доп Материал "02_L03++Видео+урок+_Основы+протокола+IS-IS"
 
 - BGP & BGP4+ (351-416 / 04:00:03 - 06:16:24)
   - BGP Fundamentals (356-378 / 04:00:00 - 05:01:00)
@@ -68,7 +77,8 @@ ___Материал 3-го дня___
      - Extended attributes BGP4+ (384-388 / 05:25:30 - 05:31:00)
   - Basic config BGP & BGP4+ (389-409 / 05:31:00 - 05:54:24)
   - BGP fault diag (410-415 / 05:54:24 - 06:06:24)
-- LAB GUIDE Л/Р 08 (BGP) (121-144 / 06:06:30 - 06:16:24) 
+- LAB GUIDE Л/Р 08 (BGP) (121-144 / 06:06:30 - 06:16:24) - посмотреть, будем делать с утра L04
+- Д/З 2 (Z:\HOMEWORK) - начинаем смотреть
 
 Ключевые темы
 ## OSPFv3 окончание ##
@@ -82,9 +92,6 @@ ___Материал 3-го дня___
 ## IS-IS ##
 Страницы 219 - 
 Запись 00:14:00 - xxxx
-
-
-Лаба 5 - сделать до Птн.
 
 https://support.huawei.com/enterprise/en/doc/EDOC1100008283/2cb93101/flash-flood
 https://support.huawei.com/enterprise/en/doc/EDOC1100008283/cc3ee1a8/timer-spf
@@ -102,17 +109,9 @@ https://support.huawei.com/enterprise/en/doc/EDOC1100038408?section=j09y&topicNa
 https://support.huawei.com/enterprise/en/doc/EDOC1100055099/70e83769/bgp-route-selection-rules
 
 
-
-Л/Р 06, 07 - самостоятельно
-
-Л/Р 8 - 
-+
-Д/З 2 (Z:\HOMEWORK)
-
-
 ## IS-IS ##
 Доп. материал. 
-1+Видео+урок+_Основы+протокола+IS-IS_fc770499-b7cd-4f6f-a3fe-3bfb40a6cc3b.mp4
+- 02_L03++Видео+урок+_Основы+протокола+IS-IS.mp4
 
 Работает на Data Link Layer (L2)
 PDU в следующем виде:

@@ -1,4 +1,15 @@
 ПТН: меня просто разорвало....Лекция/лаба - все мимо, слушать не мог, приболел.
+
+Версии учебника: 
+- ___00_HCIE3.0-R&S+Theory+v3.0.pdf___ - 
+- ___00_HCIE3.0-R&S+Theory+v3.0_RUS.pdf___
+
+Лабораторки 
+- ___00_HCIE3.0-R&S+Lab+Guide+v3.0___ - положительные отзывы от преподавателя
+- ___00_HCIE3.0-Routing & Switching Lab Guide V3.0_RUS___ - на русском, искажен шрифт
+- ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised)___ - Для отдельных лаб, переработанный материал
+- ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
+
 Доп ссылки
 - https://support.huawei.com/enterprise/en/doc/EDOC1100093894/a8e152df/example-for-configuring-bgp-next-hop-recursion-based-on-a-routing-policy
 - https://support.huawei.com/enterprise/en/doc/EDOC1100055099/36627f51/improving-bgp-security
@@ -8,7 +19,7 @@
 
 ___Материал 4-го дня___ 
 - LAB GUIDE Л/Р 08 (BGP) (121-144 / 00:29:00 - 00:07:24) - На лекции
-- 02-HCIE-Routing & Switching V3.0 Lab Guide (revised).doc (117-150 / 00:29:00 - 00:31:24) 
+- 00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised) (117-150 / 00:29:00 - 00:31:24) 
 
 - BGP Advance & Internet (417-486 / 04:31:00 - 06:43:00)
   - Tech Ragarding Mass BGP routes (422-440 / 04:31:00 - 05:31:00)
@@ -42,6 +53,6 @@ ___Материал 4-го дня___
 
 - LAB GUIDE Л/Р 09 (BGP) (145-144 / 06:43:00 - 06:52:00) 
 
-- Д/З 2 (Z:\HOMEWORK) IS-IS+BGP (свое задание txt / 06:52:00 - 07:01:23)
+- Д/З 2 (Z:\HOMEWORK) IS-IS+BGP (материал в txt / 06:52:00 - 07:01:23)
 
 
