@@ -1,5 +1,7 @@
 ___Материал 6-го дня___ 
 
+![](pictures/12.jpg)   
+
 Доп. материалы
 HCIE-R&S+Theory+v1.1.pdf
 01_+HCIE-R&S_Huawei_Certified_Internetwork_Expert-Routing_and_switching_material-v1.1.pdf - есть примеры, который отсутствуют в нашем учебнике
