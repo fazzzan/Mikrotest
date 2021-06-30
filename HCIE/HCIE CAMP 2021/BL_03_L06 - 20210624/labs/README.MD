@@ -127,3 +127,94 @@ ___ЛР13___
 [SW1](config/L12/SW1.txt), 
 [SW2](config/L12/SW2.txt), 
 [SW3](config/L12/SW3.txt)
+
+
+___HW3___
+стр. 253 HCIE-R&S+Lab+Guide+v3.0.pdf
+
+Дизайн, Адресация - на картинках ниже.
+
+![](pictures/13.jpg)
+![](pictures/14.jpg)
+
+
+## ЗАДАНИЕ ##
+1. Вкл/выкл MPLS. 
+2. Вкл/выкл MPLS LDP [Labed Distribution Protocol]: После включения LDP LSR делает мультикастовую рассылку UDP-дейтаграмм во все интерфейсы на адрес 224.0.0.2 и порт 646, где активирован LDP — так происходит поиск соседей.
+3. Настройка LSP с использованием MPLS LDP. LSP — Label Switched Path — путь переключения меток. Это однонаправленный канал от Ingress LSR до Egress LSR, то есть путь, по которому фактически пройдёт пакет через MPLS-сеть. Иными словами — это последовательность LSR.
+4. Конфигурирование LDP LSP политики на MPLS роутере
+
+## Решение ##
+0. Настраиваем IF и включаем протоколы динамической маршрутизации
+```
+interface ser0/0/2
+link-proto ppp
+ip address 10.0.23.1 24
+quit
+
+interface GigabitEthernet 0/0/1
+ip address 10.0.2.1 24
+quit
+
+interface loo 0
+ip address 4.4.4.4 24
+quit
+
+
+### включаем OSPF2
+ospf 1 router-id 4.4.4.4
+silent-interface ser 0/0/1
+silent-interface Gi 0/0/2
+ area 0.0.0.0 
+netw 10.0.23.0 0.0.0.255
+netw 10.0.2.0 0.0.0.255
+quit
+```
+![](pictures/16.jpg)
+
+
+1,2. MPLS
+```
+### Настройка mpls и включение Глобально
+mpls lsr-id 4.4.4.4
+mpls
+mpls ldp
+
+### Настройка mpls и включение на IF
+interface ser0/0/2
+mpls
+mpls ldp
+```
+display mpls ldp session - Видно что статус сессии Operational
+
+
+![](pictures/15.jpg)
+
+3. Настройка LSP с использованием MPLS LDP
+
+Видны какие-то метки
+
+![](pictures/17.jpg)
+
+Ну и включаем: стали видны все маршруты
+![](pictures/18.jpg)
+
+4. Настройка политик: судя по лабе - политика inbound
+```
+ip ip-prefix prefix1 permit 10.0.12.0 24 
+mpls ldp 
+inbound peer 3.3.3.3 fec ip-prefix prefix1 
+quit 
+```
+
+количество префиксов изменилось, но зачем - не понял
+
+![](pictures/20.jpg)
+
+
+Конфиги по задаче тут: 
+[R1](config/HW3/R1.txt), 
+[R2](config/HW3/R2.txt), 
+[R3](config/HW3/R3.txt), 
+[SW1](config/HW3/SW1.txt), 
+[SW2](config/HW3/SW2.txt)

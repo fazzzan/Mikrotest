@@ -1,0 +1,48 @@
+system-view 
+sysname R3
+ipv6
+
+ 
+### Настроим сразу IPv6
+interface ser0/0/2
+link-proto ppp
+ip address 10.0.23.1 24
+quit
+
+interface GigabitEthernet 0/0/1
+ip address 10.0.2.1 24
+quit
+
+
+### включаем ISIS100
+isis 100 
+ipv6 enable
+ipv6 enable topology ipv6
+ is-level level-1-2 
+ network-entity 10.0000.0000.0003.00 
+quit
+
+interface GigabitEthernet0/0/1 
+ isis ipv6 enable 100
+interface GigabitEthernet0/0/2
+ isis ipv6 enable 100
+
+display isis peer 
+
+### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
+
+multicast ipv6 routing-enable 
+interface GigabitEthernet 0/0/1
+pim ipv6 sm
+quit
+interface GigabitEthernet 0/0/2 
+pim ipv6 sm
+quit
+
+### Включение MLD на IF хоста
+interface GigabitEthernet 0/0/1
+mld enable
+mld static-gr FF1E::1 source 3003::100
+quit
+
+display igmp group 
