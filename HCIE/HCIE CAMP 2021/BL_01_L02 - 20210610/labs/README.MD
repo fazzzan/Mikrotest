@@ -145,7 +145,7 @@ quit
 
 Задания
 
-1. Configure between SW1 and SW2 Eth-trunk in LACP mode with load balance traffic based on source and destination MAC address.
+1. Configure between SW1 and SW2 Eth-trunk in LACP mode with load balance traffic based on source and destination MAC address. Если LACP - то будут проблемы с отключенным VLAN 1, а если static, то будет работать и без VLAN1
 
 ### LSW1, LSW2
 ```
@@ -372,3 +372,6 @@ display ospf peer brief
 Позже как-нибудь напишу как настроить NAT 
 
 Конфиги по задаче не делал: [hcie_homework_1.txt](config/HW1/hcie_homework_1.txt)
+
+Конфиг для ISP - отдельного роутера (то есть на схеме его нет). Есть конфиг для R1 и аналогичный для R2
+![](pictures/15.jpg)
