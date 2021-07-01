@@ -1,0 +1,12 @@
+system-view 
+sysname SW1
+
+int vlanif 1
+ip add	10.0.1.2 24
+
+### включаем OSPF2
+ospf 1 router-id 1.1.1.1
+ area 0.0.0.0 
+netw 10.0.1.0 0.0.0.255
+quit
+

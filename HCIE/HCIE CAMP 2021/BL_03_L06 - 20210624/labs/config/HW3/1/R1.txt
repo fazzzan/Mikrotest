@@ -12,43 +12,42 @@ interface GigabitEthernet 0/0/1
 ip address 10.0.1.1 24
 quit
 
-
-### включаем ISIS100
-isis 100 
-ipv6 enable
-ipv6 enable topology ipv6
- is-level level-1-2 
- network-entity 10.0000.0000.0001.00 
+interface loo 0
+ip address 2.2.2.2 24
 quit
 
-interface GigabitEthernet0/0/1 
- isis ipv6 enable 100
-interface GigabitEthernet0/0/2
- isis ipv6 enable 100
-interface GigabitEthernet0/0/3
- isis ipv6 enable 100
-
-display isis peer 
-
-### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
-
-multicast ipv6 routing-enable
-interface GigabitEthernet 0/0/1
-pim ipv6 sm
-quit
-interface GigabitEthernet 0/0/2 
-pim ipv6 sm
-quit
-interface GigabitEthernet 0/0/3
-pim ipv6 sm
+### включаем OSPF2
+ospf 1 router-id 2.2.2.2
+silent-interface LoopBack0
+silent-interface s 0/0/1
+silent-interface Gi 0/0/1
+ area 0.0.0.0 
+netw 10.0.12.0 0.0.0.255
+netw 10.0.1.0 0.0.0.255
 quit
 
+### Настройка mpls и включение Глобально
+mpls lsr-id 2.2.2.2
+mpls
+mpls ldp
 
-### Включение MLD на IF хоста
-interface GigabitEthernet 0/0/2
-mld enable
-mld static-gr FF1E::1 source 3003::100
-quit
+### Настройка mpls и включение на IF
+interface ser0/0/1
+mpls
+mpls ldp
 
+display mpls ldp session
 
-display igmp group 
+mpls
+lsp-trigger all
+
+### Настройка взаимодействия LDP LSP и IGP
+mpls  
+lsp-trigger all 
+
+### Настройка политик на разрешение только определенного префикса
+ip ip-prefix prefix1 permit 10.0.12.0 24 
+mpls ldp 
+inbound peer 3.3.3.3 fec ip-prefix prefix1 
+quit 
+display mpls lsp 

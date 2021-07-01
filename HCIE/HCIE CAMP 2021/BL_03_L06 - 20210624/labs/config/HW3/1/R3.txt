@@ -1,6 +1,5 @@
 system-view 
 sysname R3
-ipv6
 
  
 ### Настроим сразу IPv6
@@ -13,36 +12,32 @@ interface GigabitEthernet 0/0/1
 ip address 10.0.2.1 24
 quit
 
-
-### включаем ISIS100
-isis 100 
-ipv6 enable
-ipv6 enable topology ipv6
- is-level level-1-2 
- network-entity 10.0000.0000.0003.00 
+interface loo 0
+ip address 4.4.4.4 24
 quit
 
-interface GigabitEthernet0/0/1 
- isis ipv6 enable 100
-interface GigabitEthernet0/0/2
- isis ipv6 enable 100
 
-display isis peer 
-
-### Вкл Multicast, PIM-SM на каждом IF а на ACCESS порту - еще и IGMP
-
-multicast ipv6 routing-enable 
-interface GigabitEthernet 0/0/1
-pim ipv6 sm
-quit
-interface GigabitEthernet 0/0/2 
-pim ipv6 sm
+### включаем OSPF2
+ospf 1 router-id 4.4.4.4
+silent-interface ser 0/0/1
+silent-interface Gi 0/0/2
+ area 0.0.0.0 
+netw 10.0.23.0 0.0.0.255
+netw 10.0.2.0 0.0.0.255
 quit
 
-### Включение MLD на IF хоста
-interface GigabitEthernet 0/0/1
-mld enable
-mld static-gr FF1E::1 source 3003::100
-quit
+### Настройка mpls и включение Глобально
+mpls lsr-id 4.4.4.4
+mpls
+mpls ldp
 
-display igmp group 
+### Настройка mpls и включение на IF
+interface ser0/0/2
+mpls
+mpls ldp
+
+display mpls ldp session
+
+### Настройка взаимодействия LDP LSP и IGP
+mpls  
+lsp-trigger all 
