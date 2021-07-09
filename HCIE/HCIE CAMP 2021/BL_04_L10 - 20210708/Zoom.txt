@@ -1,0 +1,84 @@
+сейчас ждем начала в 10:00
+From Дмитрий Скоробогатский to Everyone:  10:05 AM
+повторите еще раз, пожалуйста, какие отличия будут в нашем ensp и ensp реальной лабы? что-то с конфигой nexthop'a в bgp..
+From Колесов Николай to Everyone:  10:07 AM
+на asbr в сторону своего rr next-hop-local
+From Дмитрий Скоробогатский to Everyone:  10:07 AM
+спасибо
+From Колесов Николай to Everyone:  10:13 AM
+но это и так это пришлось сделать чтобы префикс другого rr'а нормально резолвился на rr'е и ушел на p
+т.к. address family общий для unicast и labled unicast
+From Ivan Pridatkin to Everyone:  10:20 AM
+Если делать взаимную редистрибьюцию, то в чём профит labeled bgp вместо того, чтобы на линке asbr-asbr запустить ldp и объединить mpls домены?
+From Максим Монасыпов to Everyone:  10:22 AM
+BGP фильтруется хорошо
+Продолжение в 12-20?
+From УЦ Микротест Зал 10 to Everyone:  10:23 AM
+Сейчас лаба 17, продолжение теории в 12-20
+From Doctor Strange to Everyone:  10:25 AM
+Q: редистрибьюцию, то в чём профит labeled bgp вместо того, чтобы на линке asbr-asbr запустить ldp и объединить mpls домены?
+A: LDP не строит LSP для BGP префиксов по умолчанию. Он только с IGP дружит.
+Кроме того в качестве сигнального протокола транспортных меток в соседней АС может использоваться RSVP-TE. 
+From Колесов Николай to Everyone:  11:09 AM
+а то и tdp, если сеть древняя и видела еще мамонтов
+From Колесов Николай to Everyone:  01:04 PM
+Про IP FRR (IGP LFA) ничего не спрашивают?
+Спасибо!
+From Власов Сергей to Everyone:  02:06 PM
+Так что относится к DOS атакам? В тестах разные ответы :)
+From Ratseev Sergei to Everyone:  02:07 PM
+лучше прям по гайду )
+From Максим Монасыпов to Everyone:  02:19 PM
+В лабе генерик поменять на что-то конкретное?
+From Zlochevskaya to Everyone:  02:22 PM
+Работает и на дженериках
+Там ошибка в маске на одном из хостов
+Или в гейтвее.
+From Татьяна Льгова to Everyone:  02:23 PM
+Это точно по IPsec лабу? Ошибка в GW в BFD лабе на втором хосте , по крайней мере, точно есть
+From Zlochevskaya to Everyone:  02:26 PM
+Возможно и спутала. Но pc в 18 лабе друг друга видят
+From Татьяна Льгова to Everyone:  02:26 PM
+Согласен, тоже не помню проблем
+From Михаил Кабанов to Everyone:  02:27 PM
+видят-то - видят, но пакеты в тунель не попадают
+From Гучик Илья to Everyone:  02:27 PM
+Друг друга видят, но трафик не зашифрован. )
+From Ratseev Sergei to Everyone:  02:28 PM
+наверное, лицензия на шифрование от ФСБ не установлена )
+From Мирослав Пузырев to Everyone:  02:39 PM
+все пропало?
+From Дмитрий Скоробогатский to Everyone:  02:39 PM
+звук пропал?
+From Gennady Danilkin to Everyone:  02:39 PM
+++
+From Руслан Каршибаев to Everyone:  02:39 PM
+Да, пропало
+From Аэлита Курышева to Everyone:  02:39 PM
+да
+From Ratseev Sergei to Everyone:  02:39 PM
++
+From Станислав Шраге to Everyone:  02:39 PM
++
+From Сергей Бусыгин to Everyone:  02:39 PM
+а где кино
+From Координатор Филимонова Зоя to Everyone:  02:39 PM
+звоню
+From Сергей Бусыгин to Everyone:  02:39 PM
+))
+From Карайченцев Андрей to Everyone:  02:39 PM
+звука нет :(
+From Михаил Чухарев to Everyone:  02:39 PM
+И на картинке нет движения.
+From Gennady Danilkin to Everyone:  02:40 PM
+reboot )
+From Колесов Николай to Everyone:  02:40 PM
+уже и картинки нет
+From Координатор Филимонова Зоя to Everyone:  02:40 PM
+это все Танос!!
+From Ratseev Sergei to Everyone:  02:40 PM
+кофе брейк )
+From Колесов Николай to Everyone:  02:40 PM
+давайте презу в чате продолжим
+From Координатор Филимонова Зоя to Everyone:  02:40 PM
+но мы сильнее!
