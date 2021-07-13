@@ -1,0 +1,173 @@
+From УЦ Микротест Зал 10 to Everyone:  10:52 AM
+https://support.huawei.com/enterprise/my/doc/EDOC1100039540/3ff19e15/congestion-management
+https://support.huawei.com/enterprise/en/doc/EDOC1100055126/b3e02b4b/queues-and-congestion-management
+пример конфигурации очереди WFQ+PQ  и WRED profile
+drop-profile data
+wred dscp
+dscp default low-limit x1 high-limit y1 discard-percentage z1
+dscp cs2 low-limit x1 high-limit y2 discard-percentage z2
+dscp cs3 low-limit x3 high-limit y3 discard-percentage z3
+dscp cs4 low-limit x2 high-limit y4 discard-percentage z4
+----
+qos queue-profile queue_test1
+queue 0 weight ...
+queue 2 weight ...
+queue 3 weight ...
+queue 4 weight ...
+schedule wfq 0 to 4 pq 5
+queue 0 drop-profile data
+queue 2 to 4 drop-profile data
+--
+interface GigabitEthernet0/0/0
+qos queue-profile queue_test1
+From Максим Монасыпов to Everyone:  10:53 AM
+Продолжение в 12-00?
+From УЦ Микротест Зал 10 to Everyone:  10:53 AM
+Да
+From УЦ Микротест Зал 10 to Everyone:  11:09 AM
+https://github.com/eucariot/SDSM/blob/master/15.-qos/7.-ogranichenie-skorosti/4-mekhanizmy-leaky-bucket-i-token-bucket/1-algoritm-token-bucket.md
+From УЦ Микротест Зал 10 to Everyone:  11:58 AM
+в 12.05 начнём
+From Дмитрий Скоробогатский to Everyone:  11:58 AM
++
+From Мирослав Пузырев to Everyone:  11:58 AM
++
+From Evgenii Golotik to Everyone:  11:58 AM
++
+From Сергей Бусыгин to Everyone:  11:58 AM
++
+From Gennady Danilkin to Everyone:  11:59 AM
++
+From Дмитрий Скоробогатский to Everyone:  12:01 PM
+а если возможности нет? у меня билеты были, к сожалению, только на 19-е..
+From Сергей Гаврютин to Everyone:  12:01 PM
+надо будет приносить qr код чтобы на очно приходить ?
+From Максим Монасыпов to Everyone:  12:02 PM
+Я не отметил домашку. И одну из лаб не отметил. Длинный список, отсутствие напоминаний о невыполненных заданиях. Хотя бы фильтр для сокрытия уже выполненных неплохо бы
+From Злочевская Яна to Everyone:  12:06 PM
+считать ли ответы из этого обновленного раздела - верными?
+очень много расхождений с тренажеркой
+и местами - с логикой
+From Сергей Гаврютин to Everyone:  12:11 PM
+vxlan разве не пророчат замену mpls ,
+?
+From Колесов Николай to Everyone:  12:12 PM
+прочили-прочили да недопрочили
+From Gennady Danilkin to Everyone:  12:13 PM
+ещё на ipv6 даже не ушли)
+From Сергей Гаврютин to Everyone:  12:13 PM
+по ipv6 это у нас
+From Ratseev Sergei to Everyone:  12:13 PM
+у хуавей, если не датацентр, то в ентерпрайзе это скорее cloud fabric. плюсы для универсального пользовательского доступа - мобилити,
+From Сергей Гаврютин to Everyone:  01:00 PM
+а чтотогда аналог TEP у Huawei?
+From BruceLee to Everyone:  01:59 PM
+Q: vxlan разве не пророчат замену mpls ,
+?
+A: некоторые производители предлагают MPLS SR вместе с EVPN вместо vxlan, это маркетинг
+Q: а чтотогда аналог TEP у Huawei?
+ A: Что такое TEP Tunnel End Point?
+From Сергей Гаврютин to Everyone:  02:10 PM
+просьто если не ошибаюсь у cisco на nexus настраивается интерфейс nve и ужэе в его рамках настраивается vni я просто всегда думал что nve и vtep это синоним
+а разве мы не можем разные vlan затянуть d один bd ?
+From BruceLee to Everyone:  02:19 PM
+Q:просьто если не ошибаюсь у cisco на nexus настраивается интерфейс nve и ужэе в его рамках настраивается vni я просто всегда думал что nve и vtep это синоним
+A: VTEP термин из описания VLAN https://datatracker.ietf.org/doc/html/rfc7348
+VXLAN
+From Дмитрий Скоробогатский to Everyone:  02:20 PM
+а можно какой ни будь реальный пример? зачем делать vxlan l3, вместо использования обычного l3
+From BruceLee to Everyone:  02:22 PM
+NVE описан в отдельном документе https://datatracker.ietf.org/doc/html/draft-yong-nvo3-nve-04#section-2
+В реализации оба термина расположены где-то рядом. На Хуавэе тоже настраивается nve интерфейс
+From Doctor Strange to Everyone:  02:24 PM
+Q: а можно какой ни будь реальный пример? зачем делать vxlan l3, вместо использования обычного l3
+A: Чтобы не накручивать ещё целую технологию обычного L3 VPN в одной и той же сети. Если у вас сеть построена на VXLAN, и вам нужен L3 VPN, вы же не подумаете запустить там ещё MPLS.
+From Сергей Гаврютин to Everyone:  02:24 PM
+d датацентрах у провайдеров используется разные vlan  в один bd
+From Дмитрий Скоробогатский to Everyone:  02:24 PM
+понял, спасибо
+From Doctor Strange to Everyone:  02:32 PM
+У Хуавэя VLAN-BD мапинг идёт 1:1
+From Мирослав Пузырев to Everyone:  02:35 PM
+Похоже на технологию Direct-Broadcast)
+From Сергей Гаврютин to Everyone:  02:42 PM
+anycast gw не используется что ли ?
+From Doctor Strange to Everyone:  02:44 PM
+Используется. Называется distributed. Дальше будет
+From Сергей Гаврютин to Everyone:  02:44 PM
+спс
+From Сергей Гаврютин to Everyone:  02:59 PM
+перерыв на сколько времени ?
+From Potemkin Potemkin to Everyone:  02:59 PM
+15
+From Колесов Николай to Everyone:  02:59 PM
+до 14:15
+т.е. 15:15
+From Alexey Bezhko to Everyone:  03:28 PM
+Как можно менять приоритет DF вручную?
+на Huawei
+From Сергей Гаврютин to Everyone:  03:41 PM
+rd можно как у cisco автоматом назначать ?
+что то типа такого
+member vni 10001
+    suppress-arp
+    ingress-replication protocol bgp
+!
+evpn
+  vni 10001 l2
+    rd auto
+    route-target import auto
+    route-target export auto
+From BruceLee to Everyone:  03:42 PM
+Q: Как можно менять приоритет DF вручную?
+A: Приоритет DF-а не задается, можно включить режим df-election type vlan
+In EVPN All-Active scenarios, a CE at the near end is multi-homed to PEs, and broadcast, unknown unicast, and multicast (BUM) packets from the remote end are sent to the PEs. To prevent the CE from receiving multiple copies of BUM traffic from the PEs, elect one of the PEs to forward the BUM traffic to the CE.
+
+To meet this requirement, the df-election type vlan command must be run to enable VLAN-based DF election. This configuration allows the PE-CE BUM traffic to be balanced along the multi-homed links on a VLAN.
+From Alexey Bezhko to Everyone:  03:45 PM
+Его меняют вручную на Cisco и Juniper - добавлением нового (неиспользуемого) интерфейса. Думал может у Huawei есть что-нибудь свое..
+From BruceLee to Everyone:  03:47 PM
+Q: rd можно как у cisco автоматом назначать ?
+A: Есть настройка route-distinguisher auto
+From Сергей Гаврютин to Everyone:  04:01 PM
+мож про дз сразу ?
+From Михаил Кабанов to Everyone:  04:21 PM
+спасибо!
+From Сергей Гаврютин to Everyone:  04:21 PM
+а ссылки можно продублировать
+From Potemkin Potemkin to Everyone:  04:21 PM
+Спасибо
+From Ivan Pridatkin to Everyone:  04:21 PM
+А ссылки где?
+From Дмитрий Скоробогатский to Everyone:  04:21 PM
+спасибо
+From Сергей Гаврютин to Everyone:  04:21 PM
+да
+From Ivan Pridatkin to Everyone:  04:21 PM
+Вы по VXLAN EVPN обещали кинуть
+From УЦ Микротест Зал 10 to Everyone:  04:21 PM
+drop-profile data
+wred dscp
+dscp default low-limit x1 high-limit y1 discard-percentage z1
+dscp cs2 low-limit x1 high-limit y2 discard-percentage z2
+dscp cs3 low-limit x3 high-limit y3 discard-percentage z3
+dscp cs4 low-limit x2 high-limit y4 discard-percentage z4
+----
+qos queue-profile queue_test1
+queue 0 weight ...
+queue 2 weight ...
+queue 3 weight ...
+queue 4 weight ...
+schedule wfq 0 to 4 pq 5
+queue 0 drop-profile data
+queue 2 to 4 drop-profile data
+--
+interface GigabitEthernet0/0/0
+qos queue-profile queue_test1
+From Сергей Гаврютин to Everyone:  04:21 PM
+можно в мираполис выложить файл чата
+From Дмитрий Ширков to Everyone:  04:22 PM
+Спасибо, по written хотел бы уточнить, какие вопросы актуальнее, из тренажерки или старые?
+Или новые точнее)
+From Координатор Филимонова Зоя to Everyone:  04:23 PM
+файл чата содержит только текст в блокноте, никаких файлов-документов он не сохраняет
