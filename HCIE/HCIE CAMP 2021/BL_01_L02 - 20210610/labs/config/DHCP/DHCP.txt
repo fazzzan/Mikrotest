@@ -1,0 +1,76 @@
+sysname Switch
+vlan batch 28 31 100 131
+dhcp enable
+dhcp server database enable
+interface Vlanif28
+ ip address 10.5.28.1 255.255.255.0
+ ip address 10.5.28.100 255.255.255.0 sub
+ dhcp select interface
+ dhcp server gateway-list 10.5.28.1
+ dhcp server lease day 30 hour 0 minute 0
+ dhcp server dns-list 10.5.28.1
+#
+interface Vlanif31
+ ip address 10.5.31.1 255.255.255.0
+ dhcp select interface
+ dhcp server gateway-list 10.5.31.1
+ dhcp server lease day 30 hour 0 minute 0
+ dhcp server dns-list 10.5.31.1
+ 
+interface Vlanif100
+ ip address 10.5.100.1 255.255.255.0
+ dhcp select interface
+ dhcp server gateway-list 10.5.100.1
+ dhcp server lease day 30 hour 0 minute 0
+ dhcp server dns-list 10.5.100.1
+interface Vlanif131
+ ip address 10.5.131.1 255.255.255.0
+ dhcp select interface
+ dhcp server gateway-list 10.5.131.1
+ dhcp server lease day 30 hour 0 minute 0
+ dhcp server dns-list 10.5.131.1
+#
+interface GigabitEthernet0/0/1
+ port link-type access
+ port default vlan 28
+interface GigabitEthernet0/0/10
+ port link-type access
+ port default vlan 31
+#
+ interface GigabitEthernet0/0/2
+ port link-type access
+ port default vlan 100
+#
+
+dhcp server excluded-ip-address 10.5.28.0 10.5.28.101
+dhcp server excluded-ip-address 10.5.31.0 10.5.31.101
+dhcp server excluded-ip-address 10.96.0.1 10.96.0.101
+dhcp server excluded-ip-address 10.96.31.1 10.96.31.101
+ 
+ip pool pool28
+network 10.5.28.0 mask 255.255.255.0
+ip pool pool31
+network 10.5.31.0 mask 255.255.255.0
+ip pool pool100
+network 10.96.0.0 mask 255.255.255.0
+ip pool pool131
+network 10.96.31.0 mask 255.255.255.0
+
+
+
+#
+#
+#
+return
+vlan batch 28 31 100 131
+
+int loopback 28
+ip address 10.5.28.100 24
+int loopback 31
+ip address 10.5.31.1 24
+int loopback 100
+ip address 10.96.0.1 24
+int loopback 131
+ip address 10.96.31.1 24
+
+
