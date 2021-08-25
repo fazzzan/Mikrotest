@@ -20,12 +20,6 @@
    - ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised).doc___ - Для отдельных лаб, переработанный материал
 
 
-Лабораторки 
-
-
-
-- ___00_HCIE1.1-R&S+Theory+v1.1___ - Что-то 
-
 Доп. материалы E-Trunk
 - https://support.huawei.com/enterprise/en/doc/EDOC1000178168/83eed721/e-trunk
 - https://support.huawei.com/enterprise/en/doc/EDOC1000178310/cff339b5/example-for-configuring-connecting-an-e-trunk-to-a-vpls-network
