@@ -7,15 +7,24 @@
 Для тех, кто хочет запустить eNSP самостоятельно:
 - http://www.omavel.in/all/ensp-20v100r003c00/
 
-Версии учебника: 
-- ___00_HCIE3.0-R&S+Theory+v3.0.pdf___ - 
-- ___00_HCIE3.0-R&S+Theory+v3.0_RUS.pdf___
+Версии материалов:
+- v1.0
+   - ___00_HCIE1.1-R&S_Huawei_Certified_Internetwork_Expert-Routing_and_switching_material-v1.1___ - старая версия. преподаватель часто ссылается на нее, материал рассмотрен подробнее, чем в слайдах ver 3.0
+   - ___00_HCIE1.1-R&S+Theory+v1.1.pdf___ - слайды к старой версии
+
+- v3.0
+   - ___00_HCIE3.0-R&S+Theory+v3.0.pdf___ - теория - слайды
+   - ___00_HCIE3.0-R&S+Theory+v3.0_RUS.pdf___ - теории на русском - слайды
+   - ___00_HCIE3.0-R&S+Lab+Guide+v3.0___ - лабгайды v3.0
+   - ___00_HCIE3.0-Routing & Switching Lab Guide V3.0_RUS___ - лабгайды v3.0 на русском, искажен шрифт
+   - ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised).doc___ - Для отдельных лаб, переработанный материал
+
 
 Лабораторки 
-- ___00_HCIE3.0-R&S+Lab+Guide+v3.0___ - положительные отзывы от преподавателя
-- ___00_HCIE3.0-Routing & Switching Lab Guide V3.0_RUS___ - на русском, искажен шрифт
-- ___00_HCIE3.0-Routing & Switching V3.0 Lab Guide (revised)___ - Для отдельных лаб, переработанный материал
-- ___Лабы HCIE-R&S+Theory+v1.1___ - Что-то рассмотрено блее подробно, чем в ver 3.0
+
+
+
+- ___00_HCIE1.1-R&S+Theory+v1.1___ - Что-то 
 
 Доп. материалы E-Trunk
 - https://support.huawei.com/enterprise/en/doc/EDOC1000178168/83eed721/e-trunk
@@ -41,7 +50,7 @@ ___Материал 1-го дня___
    - MSTP (19-27 / 02:00:00 - 02:25:00)
       - STP/RSTP Review (19-21 / 02:00:00 - 02:05:00)
       - MSTP Fundamentals (22-27 / 02:05:00 - 02:49:00)
-      - доп. материал "01_L01+15 MSTP Implementation and Configuration.pdf" (/ 02:05:00 - 02:25:00)
+      - доп. материал "01_L01+15 MSTP Implementatin and Configuration.pdf" (/ 02:05:00 - 02:25:00)
          - Overview MSTP
          - MST Region
          - MSTI
