@@ -9,10 +9,10 @@ ___ЛР05___
 
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/01.jpg)
-![](pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L03%20-%2020210616/labs/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L03%20-%2020210616/labs/pictures/02.jpg)
 
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L03%20-%2020210616/labs/pictures/03.jpg)
 
 ## ЗАДАНИЕ ##
 1. Настроить IPv6 на узлах PC1, PC2, R1, R2 и R3: на L3 линкАх должна появиться связность IPv6. 
@@ -109,7 +109,7 @@ ___ЛР06___
 стр. 74 HCIE-R&S+Lab+Guide+v3.0.pdf
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/04.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L03%20-%2020210616/labs/pictures/04.jpg)
 ![](pictures/06.jpg)
 
 ![](pictures/05.jpg)

@@ -70,7 +70,7 @@ ___Материал 2-го дня___
 
 
 ## IPv6 137 - 218 ##
-![](pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L02%20-%2020210610/pictures/01.jpg)
 
 Сделать ЛР3
 

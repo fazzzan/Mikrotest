@@ -9,11 +9,11 @@ ___ЛР08___
 
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/01.jpg)
-![](pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L04%20-%2020210618/labs/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L04%20-%2020210618/labs/pictures/02.jpg)
 
-![](pictures/03.jpg)
-![](pictures/04.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L04%20-%2020210618/labs/pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_02_L04%20-%2020210618/labs/pictures/04.jpg)
 
 ## ЗАДАНИЕ ##
 1. Назначим IPv4 и IPv6 на все IF устройств. 

@@ -10,8 +10,8 @@ ___ЛР01___
 
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/01.jpg)
-![](pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L01%20-%2020210608/labs/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L01%20-%2020210608/labs/pictures/02.jpg)
 
 ## ЗАДАНИЕ ##
 1. Настройка MSTP функционала на всех SW. На ACCESS, порты сотрящие на PCs не должны участоввать в MSTP и их конфигурить в edge ports. 
@@ -106,12 +106,12 @@ quit
 
 Видно как уже работает MSTP для разных MSTI: рутом делается сосед
 
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L01%20-%2020210608/labs/pictures/03.jpg)
 
 Проверка:
 Видно работу за регион
 ```displa stp region-configuration```
-![](pictures/04.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L01%20-%2020210608/labs/pictures/04.jpg)
 
 ```display stp instance 2 | include Root```
 ![](pictures/05.jpg)

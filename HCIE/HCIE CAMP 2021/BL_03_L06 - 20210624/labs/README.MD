@@ -9,9 +9,9 @@ ___ЛР11___
 
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/01.jpg)
-![](pictures/02.jpg)
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_03_L06%20-%2020210624/labs/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_03_L06%20-%2020210624/labs/pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_03_L06%20-%2020210624/labs/pictures/03.jpg)
 
 
 ## ЗАДАНИЕ ##

@@ -19,13 +19,13 @@ ___Вопросы___
 
 Зашел в ЛК
 Список материалов
-![](pictures/01.jpg)
-![](pictures/02.jpg)
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/_First%20meeting_/labs/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/_First%20meeting_/labs/pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/_First%20meeting_/labs/pictures/03.jpg)
 
 Материалы скачиваю сюда:  E:\Study\HCIE\Course Materials
 ___HCIE-R&S Theory v1.1.pdf___ - слайды HCIE курса
-![](pictures/04.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/_First%20meeting_/labs/pictures/04.jpg)
 
 ___HCIE-R&S Theory v3.0.pdf___слайды HCIE курса, обновленная версия
 

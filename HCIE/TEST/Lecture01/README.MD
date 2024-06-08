@@ -1,9 +1,9 @@
 20210520 12:53
 
-![](pictures/01.jpg)
-![](pictures/02.jpg)
-![](pictures/03.jpg)
-![](pictures/04.jpg)
+![](GIT/Mikrotest/HCIE/TEST/Lecture01/pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/TEST/Lecture01/pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/TEST/Lecture01/pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/TEST/Lecture01/pictures/04.jpg)
 ![](pictures/05.jpg)
 ![](pictures/06.jpg)
 ![](pictures/07.jpg)

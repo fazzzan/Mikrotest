@@ -10,9 +10,9 @@ ___ЛР03___
 
 Дизайн, Адресация - на картинках ниже.
 
-![](pictures/01.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L02%20-%2020210610/labs/pictures/01.jpg)
 ![](pictures/13.jpg)
-![](pictures/02.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L02%20-%2020210610/labs/pictures/02.jpg)
 
 ## ЗАДАНИЕ ##
 1. Настройка IPv4 and IPv6 адресов на физических IF PC1, PC2, R1, R2, Internet. Сконфигурировать IPv4 статические маршруты, чтобы устройства виделись по IPv4. 
@@ -22,10 +22,10 @@ ___ЛР03___
 
 Как конфигурить IF на PC - ниже:
 - PC1
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L02%20-%2020210610/labs/pictures/03.jpg)
 
 - PC2
-![](pictures/03.jpg)
+![](GIT/Mikrotest/HCIE/HCIE%20CAMP%202021/BL_01_L02%20-%2020210610/labs/pictures/03.jpg)
 
 Базовая настройка R1, R2 - одинакова
 ```
